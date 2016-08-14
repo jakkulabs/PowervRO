@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config-element id="f548a72d-68a7-43dc-95ed-805087951e14"  version="0.0.0">
+  <display-name><![CDATA[configuration-element-tests]]></display-name>
+  <atts>
+    <att name="hello" type="string" read-only="false">
+      <value encoded="n"><![CDATA[world]]></value>
+    </att>
+  </atts>
+</config-element>

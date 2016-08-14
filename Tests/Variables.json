@@ -1,0 +1,109 @@
+{
+  "Connection":
+  {
+    "vROServer": "vro01.vrademo.local",
+    "Port": 8281,
+    "Username": "vroadmin@vrademo.local",
+    "Password": "P@ssword!"
+  },
+  "Workflow":
+  {
+    "NameNoParameter": "Test01",
+    "IDNoParameter": "3f92d2dc-a9fa-4323-900b-ef97196184ea",
+    "NameWildcard": "Test0",
+    "StatusCode": "202",
+    "NameOneParameter": "Test02",
+    "IDOneParameter": "5af6c1fd-3d12-4418-8542-0afad165cc08",
+    "ParameterNameOneParameter": "a",
+    "ParameterValueOneParameter": "Hello",
+    "ParameterTypeOneParameter": "string",
+    "NameMultipleParameter": "Test03",
+    "IDMultipleParameter": "edadba31-ec02-4d12-a874-c67dcb9ac05c",
+    "ParameterNameAMultipleParameter": "a",
+    "ParameterValueAMultipleParameter": "Apple",
+    "ParameterTypeAMultipleParameter": "string",
+    "ParameterNameBMultipleParameter": "b",
+    "ParameterValueBMultipleParameter": "20",
+    "ParameterTypeBMultipleParameter": "number",
+    "ExecutionStateRef": "/vco/api/workflows/3f92d2dc-a9fa-4323-900b-ef97196184ea/executions/40281e8654ddec62015553bb55cb166c/",
+    "ExecutionId": "3f92d2dc-a9fa-4323-900b-ef97196184ea",
+    "ExecutionResultRef": "/vco/api/workflows/d7326934-440c-49d0-af1b-cceca91241e4/executions/40281e8654ddec62015554bab9e716a2/",
+    "ExecutionResultWorkflow": "Test04",
+    "PermissionsPrincipal": "vrademo.local\\vRO_Users",
+    "PermissionsRights": ["View","Inspect","Execute"],
+    "SchemaOutputFile": "C:\\vRO\\Schemata\\Test01.png",
+    "IconOutputFile": "C:\\vRO\\Icons\\Test01.png",
+    "WorkflowOutputFile": "C:\\vRO\\Workflows\\Test01.workflow",
+    "ParameterDefinitionName": "Parameter1",
+    "ParameterDefinitionValue": "Apple",
+    "ParameterDefinitionType": "String",
+    "ParameterDefinitionScope": "LOCAL"
+  },
+  "Category":
+  {
+    "PowervROTestId": "40281e8654ddec6201553af63677146e",
+    "WorkflowCategoryType": "WorkflowCategory",
+    "WorkflowCategoryName": "WorkflowCategory01",
+    "WorkflowCategoryDescription": "This is WorkflowCategory01",
+    "WorkflowCategoryPath": "PowervROTest/WorkflowCategory01",
+    "ScriptModuleCategoryType": "ScriptModuleCategory",
+    "ScriptModuleCategoryName": "net.test.scriptmodule01",
+    "ScriptModuleCategoryDescription": "This is ScriptModuleCategory01",
+    "ResourceElementCategoryType": "ResourceElementCategory",
+    "ResourceElementCategoryName": "ResourceElementCategory01",
+    "ResourceElementCategoryDescription": "This is ResourceElementCategory01",
+    "ConfigurationElementCategoryType": "ConfigurationElementCategory",
+    "ConfigurationElementCategoryName": "ConfigurationElementCategory01",
+    "ConfigurationElementCategoryDescription": "This is ConfigurationElementCategory01",
+    "PermissionsPrincipal": "vrademo.local\\vRO_Users",
+    "PermissionsRights": ["View","Inspect","Execute"]
+  },
+  "Package":
+  {
+    "Name": "net.powervro.tests",
+    "PackageOutputFile": "C:\\vRO\\Packages\\net.powervro.tests.package",
+    "PermissionsPrincipal": "vrademo.local\\vRO_Users",
+    "PermissionsRights": ["View","Inspect"]
+  },
+  "Plugin":
+  {
+    "ExportedPluginName" : "VC",
+    "ExportPath" : "C:\\PowervRO\\Tests\\Export",    
+    "ImportedPluginName" : "HelloWorld",
+    "ImportedPluginFile" : "C:\\PowervRO\\Tests\\Import\\o11nplugin-helloworld-1.0.1-SNAPSHOT.vmoapp",
+    "ImportedPluginFormat" : "vmoapp"
+  },
+  "Resource":
+  {
+    "Name" : "resource-element.tests.json",
+    "FileName" : "C:\\PowervRO\\Tests\\Import\\resource-element.tests.json",
+    "ExportPath" : "C:\\PowervRO\\Tests\\Export",
+    "CategoryName" : "PowervROTests",
+    "PermissionsPrincipal": "vsphere.local\\ALL USERS",
+    "PermissionsRights": ["View","Inspect"]
+  },
+  "Action":
+  {
+    "Name" : "returnname",
+    "FileName" : "C:\\PowervRO\\Tests\\Import\\returnname.action",
+    "ExportPath" : "C:\\PowervRO\\Tests\\Export",
+    "CategoryName" : "PowervROTests",
+    "PermissionsPrincipal": "vsphere.local\\ALL USERS",
+    "PermissionsRights": ["View","Inspect"],
+    "ParameterName" : "name",
+    "ParameterValue" : "World",
+    "ParameterType" : "String",
+    "ExpectedResult" : "Hello, World"
+  },
+  "Configuration":
+  {
+    "Name" : "configuration-element-tests",
+    "FileName" : "C:\\PowervRO\\Tests\\Import\\configuration-element-tests.vsoconf",
+    "ExportPath" : "C:\\PowervRO\\Tests\\Export",
+    "CategoryName" : "PowervROTests",
+    "PermissionsPrincipal": "vsphere.local\\ALL USERS",
+    "PermissionsRights": ["View","Inspect"]    
+
+  }  
+
+}
