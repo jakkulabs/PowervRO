@@ -94,7 +94,7 @@ function Get-PowervRO {
 
             Invoke-RestMethod -Method Get -Uri $ZipUrl -OutFile $OutputFile
 
-            Add-Type -assembly “system.io.compression.filesystem”
+            Add-Type -assembly "system.io.compression.filesystem"
 
             $PowervROModulePath = $OutputFile.Substring(0, $OutputFile.LastIndexOf('.'))
 
