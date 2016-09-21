@@ -20,7 +20,7 @@
     System.IO.FileInfo
 
     .EXAMPLE
-    Get-vROAction -Id 92768e86-d7bc-400d-bb6d-11e6e10eb133 | Export-vROAction -File C:\Actions\Test01.action
+    Get-vROAction -Id 92768e86-d7bc-400d-bb6d-11e6e10eb133 | Export-vROAction -Path C:\Actions\Test01.action
 
     .EXAMPLE
     Get-vROAction -Name Test01 -Category com.company.test | Export-vROAction
@@ -67,8 +67,6 @@
                 $Filename = $Request.Headers['Content-Disposition'].Split("=")[1]
 
                 if (!$PSBoundParameters.ContainsKey("Path")) {
-
-                    Write-Verbose -Message "File parameter not passed."
 
                     Write-Verbose -Message "Path parameter not passed, exporting to current directory."
                     $FullPath = "$($(Get-Location).Path)\$($Filename)"
