@@ -29,10 +29,10 @@
     Thanks to @burkeazbill for a few hints with this one https://github.com/burkeazbill/vroClientScripts
     
     .EXAMPLE
-    Export-vROPackage -Name "net.powervro.tests" -File C:\Workflows\net.powervro.tests.workflow
+    Export-vROPackage -Name "net.powervro.tests" -File C:\Packages\net.powervro.tests.package
 
     .EXAMPLE
-    Get-vROPackage -Name 'net.powervro.tests' | Export-vROPackage -File C:\Workflows\Test01.workflow -DontExportConfigurationAttributeValues
+    Get-vROPackage -Name 'net.powervro.tests' | Export-vROPackage -File C:\Packages\net.powervro.tests.package -DontExportConfigurationAttributeValues
 #>
 [CmdletBinding()][OutputType('System.IO.FileInfo')]
 
