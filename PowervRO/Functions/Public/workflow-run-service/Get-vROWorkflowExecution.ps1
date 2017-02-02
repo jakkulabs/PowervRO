@@ -19,17 +19,22 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
+    Get-vROWorkflowExecution -Id xxxxxxxxxxxxxxxxxxxxxx
+
+    .EXAMPLE
 	Get-vROWorkflowExecution -Name 'Test01'
+
+    .EXAMPLE
+    Get-vROWorkflow -Name 'Test01' | Get-vROWorkflowExecution
 #>
 [CmdletBinding(DefaultParametersetName="Name")][OutputType('System.Management.Automation.PSObject')]
 
-    Param
-    (   
-    [parameter(Mandatory=$true,ValueFromPipelinebyPropertyName=$true,ParameterSetName="Id")]
-    [String]$Id,
-    
-    [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true,ParameterSetName="Name")]
-    [String]$Name 
+    Param (   
+        [Parameter(Mandatory=$true, ValueFromPipelinebyPropertyName=$true, ParameterSetName="Id")]
+        [String]$Id,
+
+        [Parameter(Mandatory=$true, ParameterSetName="Name")]
+        [String]$Name
     )    
 
     begin {
@@ -38,39 +43,26 @@
 
     process {
 
-        try {       
-    
-            # --- Send REST call and process results
-            switch ($PsCmdlet.ParameterSetName) {         
-            
-                "Id"  {
-            
-                    $Workflow = Get-vROWorkflow -Id $Id
-                    break
+        try {
 
-                }
+            if ($PSCmdlet.ParameterSetName -eq "Name") {
 
-                "Name" {
-
-                    $Workflow = Get-vROWorkflow -Name $Name
-                    break
-                }
+                $Id = (Get-vROWorkflow -Name $Name).Id
             }
+    
+            $URI = "/vco/api/workflows/$($Id)/executions"
 
-            $ItemHref = $Workflow.ItemHref
-            $ExecutionURI = ("$($ItemHref)executions/" -split "8281")[1]
-
-            $Executions = Invoke-vRORestMethod -Method GET -URI $ExecutionURI -Verbose:$VerbosePreference
+            $Executions = Invoke-vRORestMethod -Method GET -URI $URI  -Verbose:$VerbosePreference
 
             $Data = $Executions.relations.link | Where-Object {$_.attributes}
 
             foreach ($Execution in $Data){
 
-                [pscustomobject]@{                        
+                [PSCustomObject]@{                        
         
                     Name = ($Execution.attributes | Where-Object {$_.name -eq 'name'}).value
                     ID = ($Execution.attributes | Where-Object {$_.name -eq 'id'}).value
-                    Execution = "$ExecutionURI$(($Execution.attributes | Where-Object {$_.name -eq 'id'}).value)/"
+                    Execution = "$URI/$(($Execution.attributes | Where-Object {$_.name -eq 'id'}).value)/"
                     State = ($Execution.attributes | Where-Object {$_.name -eq 'state'}).value
                     StartedBy = ($Execution.attributes | Where-Object {$_.name -eq 'startedBy'}).value
                     StartDate = ($Execution.attributes | Where-Object {$_.name -eq 'StartDate'}).value
