@@ -6,11 +6,8 @@
     .DESCRIPTION
     Invoke a vRO Workflow
 
-    .PARAMETER ID
-    vRO Workflow ID
-
-    .PARAMETER ItemHref
-    vRO ItemHref
+    .PARAMETER Id
+    vRO Workflow Id
 
     .PARAMETER ParameterName
     Supply a single parameter to the workflow
@@ -24,9 +21,6 @@
     .PARAMETER Parameters
     Supply workflow parameters via JSON or New-vROParameterDefinition
 
-    .PARAMETER NoParameters
-    Required when using ItemHref and supplying no parameters
-
     .INPUTS
     System.String
     System.Switch
@@ -36,9 +30,6 @@
 
     .EXAMPLE
 	Invoke-vROWorkflow -ID c0278910-9ae2-46c5-bb45-2292fe88e3ab
-
-    .EXAMPLE
-	Invoke-vROWorkflow -ItemHref https://vRO01.vrademo.local:8281/vco/api/workflows/c0278910-9ae2-46c5-bb45-2292fe88e3ab/
 
     .EXAMPLE
 	Invoke-vROWorkflow -ID c0278910-9ae2-46c5-bb45-2292fe88e3ab -ParameterName 'text' -ParameterValue 'Apple' -ParameterType 'String'
@@ -70,48 +61,35 @@
 
     .EXAMPLE
     Get-vROWorkflow -Name 'Test-Workflow' | Invoke-vROWorkflow -ParameterName a -ParameterValue 'Nature' -ParameterType String
-
-    .EXAMPLE
-    Get-vROWorkflow -Name 'Test-Workflow' | Select ItemHref | Invoke-vROWorkflow -ParameterName a -ParameterValue 'Junior' -ParameterType String
 #>
 [CmdletBinding(DefaultParametersetName="A")][OutputType('System.Management.Automation.PSObject')]
 
     Param
     (   
     
-    [parameter(Mandatory=$true,ValueFromPipelinebyPropertyName=$true,ParameterSetName="A")]
-    [parameter(Mandatory=$true,ParameterSetName="B")]
-    [ValidateNotNullOrEmpty()]
-    [String]$ID,
+        [Parameter(Mandatory=$true,ValueFromPipelinebyPropertyName=$true,ParameterSetName="A")]
+        [parameter(Mandatory=$true,ParameterSetName="B")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Id,
 
-    [parameter(Mandatory=$true,ValueFromPipelinebyPropertyName=$true,ParameterSetName="C")]
-    [parameter(Mandatory=$true,ValueFromPipelinebyPropertyName=$true,ParameterSetName="D")]
-    [parameter(Mandatory=$true,ValueFromPipelinebyPropertyName=$true,ParameterSetName="E")]
-    [ValidateNotNullOrEmpty()]
-    [String]$ItemHref,
+        [Parameter(Mandatory=$false,ParameterSetName="A")]
+        [parameter(ParameterSetName="C")]
+        [ValidateNotNullOrEmpty()]
+        [String]$ParameterName,
 
-    [parameter(Mandatory=$false,ParameterSetName="A")]
-    [parameter(ParameterSetName="C")]
-    [ValidateNotNullOrEmpty()]
-    [String]$ParameterName,
+        [Parameter(Mandatory=$false,ParameterSetName="A")]
+        [parameter(ParameterSetName="C")]
+        [String]$ParameterValue,
 
-    [parameter(Mandatory=$false,ParameterSetName="A")]
-    [parameter(ParameterSetName="C")]
-    [String]$ParameterValue,
+        [Parameter(Mandatory=$false,ParameterSetName="A")]
+        [parameter(ParameterSetName="C")]
+        [ValidateNotNullOrEmpty()]
+        [String]$ParameterType,
 
-    [parameter(Mandatory=$false,ParameterSetName="A")]
-    [parameter(ParameterSetName="C")]
-    [ValidateNotNullOrEmpty()]
-    [String]$ParameterType,
-
-    [parameter(Mandatory=$false,ParameterSetName="B")]
-    [parameter(ParameterSetName="D")]
-    [ValidateNotNullOrEmpty()]
-    [PSCustomObject[]]$Parameters,
-
-    [parameter(Mandatory=$false,ParameterSetName="E")]
-    [ValidateNotNullOrEmpty()]
-    [Switch]$NoParameters
+        [Parameter(Mandatory=$false,ParameterSetName="B")]
+        [parameter(ParameterSetName="D")]
+        [ValidateNotNullOrEmpty()]
+        [PSCustomObject[]]$Parameters
     )
 
     try {
@@ -162,14 +140,7 @@
 "@                  
         }
 
-        if ($PSBoundParameters.ContainsKey('ItemHref')){
-
-            $URI = ("$($ItemHref)executions/" -split "8281")[1]
-        }
-        else {
-
-            $URI = "/vco/api/workflows/$($ID)/executions/"
-        }
+        $URI = "/vco/api/workflows/$($Id)/executions/"
 
         $InvokeRequest = Invoke-vRORestMethod -Method POST -URI $URI -Body $Body -WebRequest -Verbose:$VerbosePreference                 
         
