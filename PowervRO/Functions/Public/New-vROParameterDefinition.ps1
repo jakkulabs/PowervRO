@@ -32,7 +32,7 @@ function New-vROParameterDefinition {
     $Param1 = New-vROParameterDefinition -Name Location -Value UK -Type String -Scope LOCAL
     Invoke-vROAction -Id 92768e86-d7bc-400d-bb6d-11e6e10eb133 -Parameters $Param1
 #>
-[CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
+[CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact="Low")][OutputType('System.Management.Automation.PSObject')]
 
     Param (
 
@@ -62,21 +62,24 @@ function New-vROParameterDefinition {
 
         try {
 
-            # --- Define object
-            $ParameterDefinition = @"
-    
-                {
-                    "name": "$($Name)",
-                    "type": "$($Type.ToLower())",
-                    "scope": "$($Scope.ToLower())",
-                    "value": {
-                        "$($Type.ToLower())":{ "value": "$($Value)"}
-                    }
-                }
+            if ($PSCmdlet.ShouldProcess("WorkflowParameterDefinition")){
 
-"@
+                # --- Define object
+                $ParameterDefinition = @"
         
-            $ParameterDefinition | ConvertFrom-Json
+                    {
+                        "name": "$($Name)",
+                        "type": "$($Type.ToLower())",
+                        "scope": "$($Scope.ToLower())",
+                        "value": {
+                            "$($Type.ToLower())":{ "value": "$($Value)"}
+                        }
+                    }
+"@
+            
+                $ParameterDefinition | ConvertFrom-Json
+
+            }
 
         }
         catch [Exception]{
