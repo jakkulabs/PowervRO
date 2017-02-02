@@ -1,85 +1,117 @@
 # Import-vROAction
 
 ## SYNOPSIS
-    
 Imports an action in a given category.
 
 ## SYNTAX
- Import-vROAction [-CategoryName] <String> [-File] <String[]> [-Overwrite] [-WhatIf] [-Confirm] [<CommonParameters>]    
+
+```
+Import-vROAction [-CategoryName] <String> [-File] <String[]> [-Overwrite] [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Imports an action in a given category.
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Import-vROAction -File C:\Actions\test01.action -CategoryName "com.company.package" -Confirm:$false
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-ChildItem -Path C:\Actions\*.action | Import-vROAction -CategoryName "com.company.package" -Confirm:$false
+```
 
 ## PARAMETERS
 
-
-### CategoryName
-
+### -CategoryName
 The name of the action category
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### File
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -File
 The action file
 
-* Required: true
-* Position: 2
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### Overwrite
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
+### -Overwrite
 Overwrite an existing action
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
 
-### WhatIf
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 Switch
 
 ## OUTPUTS
 
-None
+### None
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Import-vROAction -File C:\Actions\test01.action -CategoryName "com.company.package" -Confirm:$false
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-ChildItem -Path C:\Actions\*.action | Import-vROAction -CategoryName "com.company.package" -Confirm:$false
-```
+## RELATED LINKS
 

@@ -1,29 +1,35 @@
 # Get-vROPlugin
 
 ## SYNOPSIS
-    
 Retrieves a list of all installed plugins
 
 ## SYNTAX
- Get-vROPlugin [<CommonParameters>]    
+
+```
+Get-vROPlugin
+```
 
 ## DESCRIPTION
-
 Retrieves a list of all installed plugins
 
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vROPlugin
+```
+
+## PARAMETERS
 
 ## INPUTS
 
-None.
+### None.
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vROPlugin
-```
+## RELATED LINKS
 

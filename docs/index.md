@@ -5,9 +5,13 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 ## Compatibility
 
-**vRO: versions 6.0.1, 6.0.4 and 7.0.1 have been tested**
+**vRO: version 6.1, 7.0 and 7.0.1**
 
-**PowerShell: version 4** is required.  We haven't tested yet with version 5, although we wouldn't expect significant issues.
+**PowerShell: version 4 and 5**
+
+## Authentication
+
+Currently PowervRO only supports basic Authentication. If you are using one of the other supported methods let us know.
 
 ## Download
 
@@ -29,3 +33,5 @@ Documentation for each command can be viewed with Get-Help, e.g.:
 ```
 Get-Help Get-vROWorkflow
 ```
+
+Alternatively check out our [Read the Docs site](http://powervro.readthedocs.org/en/latest/ "Title")

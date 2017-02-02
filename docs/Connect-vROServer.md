@@ -1,107 +1,148 @@
 # Connect-vROServer
 
 ## SYNOPSIS
-    
 Connect to a vRO Server
 
 ## SYNTAX
- Connect-vROServer -Server <String> [-Port <Int32>] -Username <String> -Password <String> [-IgnoreCertRequirements]  [<CommonParameters>] Connect-vROServer -Server <String> [-Port <Int32>] -Credential <PSCredential> [-IgnoreCertRequirements]  [<CommonParameters>]    
+
+### Username (Default)
+```
+Connect-vROServer -Server <String> [-Port <Int32>] -Username <String> -Password <SecureString>
+ [-IgnoreCertRequirements]
+```
+
+### Credential
+```
+Connect-vROServer -Server <String> [-Port <Int32>] -Credential <PSCredential> [-IgnoreCertRequirements]
+```
 
 ## DESCRIPTION
-
 Connect to a vRO Server and generate a connection object with Servername, Token etc
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+$SecureString = "MySecurePassword" | ConvertTo-SecureString -AsPlainText -Force
+```
+
+Connect-vROServer -Server vro01.domain.local -Username TenantAdmin01 -Password $SecureString -IgnoreCertRequirements
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Connect-vROServer -Server vro01.domain.local -Credential (Get-Credential)
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Connect-vROServer -Server vro01.domain.local -Port 443 -Credential (Get-Credential)
+```
 
 ## PARAMETERS
 
-
-### Server
-
+### -Server
 vRO Server to connect to
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Port
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-Optionally specify the server port. Default is 8281
+### -Port
+Optionally specify the server port.
+Default is 8281
 
-* Required: false
-* Position: named
-* Default value: 8281
-* Accept pipeline input: false
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: 
 
-### Username
+Required: False
+Position: Named
+Default value: 8281
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Username
 Username to connect with
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: Username
+Aliases: 
 
-### Password
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Password
 Password to connect with
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SecureString
+Parameter Sets: Username
+Aliases: 
 
-### Credential
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Credential
 Credential object to connect with
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: PSCredential
+Parameter Sets: Credential
+Aliases: 
 
-### IgnoreCertRequirements
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -IgnoreCertRequirements
 Ignore requirements to use fully signed certificates
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
+Security.SecureString
 Management.Automation.PSCredential
 Switch
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Connect-vROServer -Server vro01.domain.local -Username TenantAdmin01 -Password P@ssword -IgnoreCertRequirements
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Connect-vROServer -Server vro01.domain.local -Credential (Get-Credential)
-
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Connect-vROServer -Server vro01.domain.local -Port 443 -Credential (Get-Credential)
-```
+## RELATED LINKS
 

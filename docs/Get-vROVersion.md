@@ -1,29 +1,35 @@
 # Get-vROVersion
 
 ## SYNOPSIS
-    
 Retrieve vRO version information
 
 ## SYNTAX
- Get-vROVersion [<CommonParameters>]    
+
+```
+Get-vROVersion
+```
 
 ## DESCRIPTION
-
 Retrieve vRO version information
 
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vROVersion
+```
+
+## PARAMETERS
 
 ## INPUTS
 
-None
+### None
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vROVersion
-```
+## RELATED LINKS
 

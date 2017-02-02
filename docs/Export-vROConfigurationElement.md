@@ -1,61 +1,72 @@
 # Export-vROConfigurationElement
 
 ## SYNOPSIS
-    
 Exports a configuration element by its ID.
 
 ## SYNTAX
- Export-vROConfigurationElement [-Id] <String> [[-Path] <String>] [<CommonParameters>]    
+
+```
+Export-vROConfigurationElement [-Id] <String> [[-Path] <String>]
+```
 
 ## DESCRIPTION
-
 Exports a configuration element by its ID.
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vROConfigurationElement -Id 92768e86-d7bc-400d-bb6d-11e6e10eb133 | Export-vROConfigurationElement -Path C:\Configurations
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Export-vROConfigurationElement -Id 92768e86-d7bc-400d-bb6d-11e6e10eb133
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The id of the action
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Path
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
-The path of the exported file. If this parameter is not passed, the resource element
+### -Path
+The path of the exported file.
+If this parameter is not passed, the resource element
 will be exported to the current working directory.
 
-* Required: false
-* Position: 2
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.IO.FileInfo
+### System.IO.FileInfo
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vROConfigurationElement -Id 92768e86-d7bc-400d-bb6d-11e6e10eb133 | Export-vROConfigurationElement -Path 
-C:\Configurations
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Export-vROConfigurationElement -Id 92768e86-d7bc-400d-bb6d-11e6e10eb133
-```
+## RELATED LINKS
 

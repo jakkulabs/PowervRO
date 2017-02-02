@@ -1,49 +1,81 @@
 # Get-vROWorkflowExecution
 
 ## SYNOPSIS
-    
 Get vRO Workflow Executions
 
 ## SYNTAX
- Get-vROWorkflowExecution -Name <String> [<CommonParameters>] Get-vROWorkflowExecution -Id <String> [<CommonParameters>]    
+
+### Name (Default)
+```
+Get-vROWorkflowExecution -Name <String>
+```
+
+### Id
+```
+Get-vROWorkflowExecution -Id <String>
+```
 
 ## DESCRIPTION
-
 Get vRO Workflow Executions
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vROWorkflowExecution -Id xxxxxxxxxxxxxxxxxxxxxx
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vROWorkflowExecution -Name 'Test01'
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vROWorkflow -Name 'Test01' | Get-vROWorkflowExecution
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 Retrieve workflow by Id
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: Id
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
 
+### -Name
 Retrieve workflow by Name
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vROWorkflowExecution -Name 'Test01'
-```
+## RELATED LINKS
 

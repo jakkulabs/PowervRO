@@ -1,79 +1,103 @@
 # Export-vROPackage
 
 ## SYNOPSIS
-    
 Export a vRO Package to a .package file
 
 ## SYNTAX
- Export-vROPackage [-Name] <String> [-File] <String> [-DontExportConfigurationAttributeValues] [-DontExportGlobalTags]  [<CommonParameters>]    
+
+```
+Export-vROPackage [-Name] <String> [-File] <String> [-DontExportConfigurationAttributeValues]
+ [-DontExportGlobalTags]
+```
 
 ## DESCRIPTION
-
 Export a vRO Package to a .package file
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Export-vROPackage -Name "net.powervro.tests" -File C:\Packages\net.powervro.tests.package
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vROPackage -Name 'net.powervro.tests' | Export-vROPackage -File C:\Packages\net.powervro.tests.package -DontExportConfigurationAttributeValues
+```
 
 ## PARAMETERS
 
-
-### Name
-
+### -Name
 Specify the Name of the vRO Package
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### File
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
+### -File
 Specify the Filename to export to - should be a .package file
 
-* Required: true
-* Position: 2
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### DontExportConfigurationAttributeValues
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -DontExportConfigurationAttributeValues
 Don't Export Configuration Attribute Values
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
 
-### DontExportGlobalTags
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -DontExportGlobalTags
 Don't Export Global Tags
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 Switch
 
 ## OUTPUTS
 
-System.IO.FileInfo
+### System.IO.FileInfo
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
+Thanks to @burkeazbill for a few hints with this one https://github.com/burkeazbill/vroClientScripts
 
-PS C:\>Export-vROPackage -Name "net.powervro.tests" -File C:\Workflows\net.powervro.tests.workflow
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vROPackage -Name 'net.powervro.tests' | Export-vROPackage -File C:\Workflows\Test01.workflow 
--DontExportConfigurationAttributeValues
-```
+## RELATED LINKS
 

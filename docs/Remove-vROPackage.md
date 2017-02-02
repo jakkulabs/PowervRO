@@ -1,86 +1,130 @@
 # Remove-vROPackage
 
 ## SYNOPSIS
-    
 Remove a vRO Package
 
 ## SYNTAX
- Remove-vROPackage -Name <String[]> [-WhatIf] [-Confirm] [<CommonParameters>] Remove-vROPackage -Name <String[]> [-DeletePackageWithContent] [-WhatIf] [-Confirm] [<CommonParameters>] Remove-vROPackage -Name <String[]> [-DeletePackageKeepingShared] [-WhatIf] [-Confirm] [<CommonParameters>]    
+
+### DeletePackage (Default)
+```
+Remove-vROPackage -Name <String[]> [-WhatIf] [-Confirm]
+```
+
+### DeletePackageWithContent
+```
+Remove-vROPackage -Name <String[]> [-DeletePackageWithContent] [-WhatIf] [-Confirm]
+```
+
+### DeletePackageKeepingShared
+```
+Remove-vROPackage -Name <String[]> [-DeletePackageKeepingShared] [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Remove a vRO Package
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Remove-vROPackage -Name "net.powervro.tests"
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vROPackage -Name "net.powervro.tests" | Remove-vROPackage -Confirm:$false
+```
 
 ## PARAMETERS
 
-
-### Name
-
+### -Name
 Package Name
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### DeletePackageWithContent
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
-Deletes the package along with the content. If other packages share elements with this package, they will be deleted
+### -DeletePackageWithContent
+Deletes the package along with the content.
+If other packages share elements with this package, they will be deleted
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: DeletePackageWithContent
+Aliases: 
 
-### DeletePackageKeepingShared
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-Deletes the package along with the content. If other packages share elements with this package, the elements will not 
-be removed.
+### -DeletePackageKeepingShared
+Deletes the package along with the content.
+If other packages share elements with this package, the elements will not be removed.
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: DeletePackageKeepingShared
+Aliases: 
 
-### WhatIf
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String.
+### System.String.
 Switch
 
 ## OUTPUTS
 
-None
+### None
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Remove-vROPackage -Name "net.powervro.tests"
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vROPackage -Name "net.powervro.tests" | Remove-vROPackage -Confirm:$false
-```
+## RELATED LINKS
 

@@ -1,29 +1,35 @@
 # Get-vROAPIEndpoint
 
 ## SYNOPSIS
-    
 Lists the available top-level service entry points.
 
 ## SYNTAX
- Get-vROAPIEndpoint [<CommonParameters>]    
+
+```
+Get-vROAPIEndpoint
+```
 
 ## DESCRIPTION
-
 Lists the available top-level service entry points.
 
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vROApiServiceEntryPoint
+```
+
+## PARAMETERS
 
 ## INPUTS
 
-None
+### None
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vROApiServiceEntryPoint
-```
+## RELATED LINKS
 

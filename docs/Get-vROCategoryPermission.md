@@ -1,50 +1,55 @@
 # Get-vROCategoryPermission
 
 ## SYNOPSIS
-    
 Get vRO Category Permissions
 
 ## SYNTAX
- Get-vROCategoryPermission [-Id] <String[]> [<CommonParameters>]    
+
+```
+Get-vROCategoryPermission [-Id] <String[]>
+```
 
 ## DESCRIPTION
-
 Get vRO Category Permissions
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vROCategoryPermission -Id '40281e8654ddec6201553af63677146e'
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vROCategory -Id '40281e8654ddec6201553af63677146e' | Get-vROCategoryPermission
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 Category Id
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vROCategoryPermission -Id '40281e8654ddec6201553af63677146e'
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vROCategory -Id '40281e8654ddec6201553af63677146e' | Get-vROCategoryPermission
-```
+## RELATED LINKS
 

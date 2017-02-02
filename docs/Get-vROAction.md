@@ -1,78 +1,102 @@
 # Get-vROAction
 
 ## SYNOPSIS
-    
 Retrieves a list of all actions
 
 ## SYNTAX
- Get-vROAction [<CommonParameters>] Get-vROAction -Id <String> [<CommonParameters>] Get-vROAction -Name <String> -Category <String> [<CommonParameters>]    
+
+### All (Default)
+```
+Get-vROAction
+```
+
+### Id
+```
+Get-vROAction -Id <String>
+```
+
+### Name
+```
+Get-vROAction -Name <String> -Category <String>
+```
 
 ## DESCRIPTION
-
 Retrieves a list of all actions
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vROAction
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vROAction -Id f2193849-89e9-4136-8607-526eb196ee4c
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vROAction -Name Test01 -Category com.company.test
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The id of the action
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: Id
+Aliases: 
 
-### Name
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
+### -Name
 The name of the action
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases: 
 
-### Category
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
-The category that the action is in. This must be used with the name parameter
+### -Category
+The category that the action is in.
+This must be used with the name parameter
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vROAction
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vROAction -Id f2193849-89e9-4136-8607-526eb196ee4c
-
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vROAction -Name Test01 -Category com.company.test
-```
+## RELATED LINKS
 

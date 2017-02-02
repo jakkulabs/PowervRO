@@ -1,75 +1,101 @@
 # Set-vROPluginState
 
 ## SYNOPSIS
-    
 Sets the state of a vRO plugin
 
 ## SYNTAX
- Set-vROPluginState [-Name] <String[]> [-Enabled] <Boolean> [-WhatIf] [-Confirm] [<CommonParameters>]    
+
+```
+Set-vROPluginState [-Name] <String[]> [-Enabled] <Boolean> [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Sets the state of a vRO plugin
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Remove-vROPlugin -Name ExamplePlugin -Enabled:$True
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Remove-vROPlugin -Name ExamplePlugin -Enabled:$False
+```
 
 ## PARAMETERS
 
-
-### Name
-
+### -Name
 The name of the plugin
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### Enabled
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
+### -Enabled
 A boolean value to decide whether or not the plugin is enabled
 
-* Required: true
-* Position: 2
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases: 
 
-### WhatIf
+Required: True
+Position: 2
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String.
+### System.String.
 
 ## OUTPUTS
 
-None
+### None
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Remove-vROPlugin -Name ExamplePlugin -Enabled:$True
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Remove-vROPlugin -Name ExamplePlugin -Enabled:$False
-```
+## RELATED LINKS
 

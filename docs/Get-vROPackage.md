@@ -1,51 +1,62 @@
 # Get-vROPackage
 
 ## SYNOPSIS
-    
 Get vRO Packages
 
 ## SYNTAX
- Get-vROPackage [<CommonParameters>] Get-vROPackage -Name <String> [<CommonParameters>]    
+
+### All (Default)
+```
+Get-vROPackage
+```
+
+### Name
+```
+Get-vROPackage -Name <String>
+```
 
 ## DESCRIPTION
-
 Get vRO Packages
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vROPackage
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vROPackage -Name 'com.vmware.library.powershell'
+```
 
 ## PARAMETERS
 
-
-### Name
-
+### -Name
 Retrieve Package by Name
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 System.Switch
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vROPackage
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vROPackage -Name 'com.vmware.library.powershell'
-```
+## RELATED LINKS
 

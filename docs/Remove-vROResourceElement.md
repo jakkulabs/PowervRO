@@ -1,77 +1,102 @@
 # Remove-vROResourceElement
 
 ## SYNOPSIS
-    
 Remove a vRO Resource Element
 
 ## SYNTAX
- Remove-vROResourceElement [-Id] <String[]> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]    
+
+```
+Remove-vROResourceElement [-Id] <String[]> [-Force] [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Remove a vRO Resource Element
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Remove-vROResourceElement -Id "3f92d2dc-a9fa-4323-900b-ef97196184ea"
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vROResourceElement -Id "3f92d2dc-a9fa-4323-900b-ef97196184ea" | Remove-vROResourceElement
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 Action ID
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### Force
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
-If the resource element is referenced by some workflows, it is considered to be 'in use'and the delete operation will 
-fail, unless the 'force' option is provided.
+### -Force
+If the resource element is referenced by some workflows, it is considered to be 'in use'and the delete operation will fail, unless the 'force' option is provided.
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
 
-### WhatIf
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String.
+### System.String.
 Switch
 
 ## OUTPUTS
 
-None
+### None
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Remove-vROResourceElement -Id "3f92d2dc-a9fa-4323-900b-ef97196184ea"
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vROResourceElement -Id "3f92d2dc-a9fa-4323-900b-ef97196184ea" | Remove-vROResourceElement
-```
+## RELATED LINKS
 

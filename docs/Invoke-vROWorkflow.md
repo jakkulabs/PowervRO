@@ -1,132 +1,52 @@
 # Invoke-vROWorkflow
 
 ## SYNOPSIS
-    
 Invoke a vRO Workflow
 
 ## SYNTAX
- Invoke-vROWorkflow -ID <String> [-ParameterName <String>] [-ParameterValue <String>] [-ParameterType <String>]  [<CommonParameters>] Invoke-vROWorkflow -ID <String> [-Parameters <PSObject[]>] [<CommonParameters>] Invoke-vROWorkflow -ItemHref <String> [-NoParameters] [<CommonParameters>] Invoke-vROWorkflow -ItemHref <String> [-Parameters <PSObject[]>] [<CommonParameters>] Invoke-vROWorkflow -ItemHref <String> [-ParameterName <String>] [-ParameterValue <String>] [-ParameterType <String>]  [<CommonParameters>]    
+
+### A (Default)
+```
+Invoke-vROWorkflow -Id <String> [-ParameterName <String>] [-ParameterValue <String>] [-ParameterType <String>]
+```
+
+### B
+```
+Invoke-vROWorkflow -Id <String> [-Parameters <PSObject[]>]
+```
+
+### C
+```
+Invoke-vROWorkflow [-ParameterName <String>] [-ParameterValue <String>] [-ParameterType <String>]
+```
+
+### D
+```
+Invoke-vROWorkflow [-Parameters <PSObject[]>]
+```
 
 ## DESCRIPTION
-
 Invoke a vRO Workflow
 
-## PARAMETERS
-
-
-### ID
-
-vRO Workflow ID
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
-
-### ItemHref
-
-vRO ItemHref
-
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: true (ByPropertyName)
-
-### ParameterName
-
-Supply a single parameter to the workflow
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### ParameterValue
-
-Supply the value of the single parameter
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### ParameterType
-
-Supply the type of the single parameter
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### Parameters
-
-Supply workflow parameters via JSON or New-vROParameterDefinition
-
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
-
-### NoParameters
-
-Required when using ItemHref and supplying no parameters
-
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
-
-## INPUTS
-
-System.String
-System.Switch
-
-## OUTPUTS
-
-System.Management.Automation.PSObject.
-
 ## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
 ```
--------------------------- EXAMPLE 1 --------------------------
+Invoke-vROWorkflow -ID c0278910-9ae2-46c5-bb45-2292fe88e3ab
+```
 
-PS C:\>Invoke-vROWorkflow -ID c0278910-9ae2-46c5-bb45-2292fe88e3ab
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Invoke-vROWorkflow -ID c0278910-9ae2-46c5-bb45-2292fe88e3ab -ParameterName 'text' -ParameterValue 'Apple' -ParameterType 'String'
+```
 
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Invoke-vROWorkflow -ItemHref 
-https://vRO01.vrademo.local:8281/vco/api/workflows/c0278910-9ae2-46c5-bb45-2292fe88e3ab/
-
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Invoke-vROWorkflow -ID c0278910-9ae2-46c5-bb45-2292fe88e3ab -ParameterName 'text' -ParameterValue 'Apple' 
--ParameterType 'String'
-
-
-
-
-
-
-
--------------------------- EXAMPLE 4 --------------------------
-
-PS C:\>$Parameters =  @"
-
+### -------------------------- EXAMPLE 3 --------------------------
+```
+$Parameters =  @"
+```
 
 {"parameters":
-[
+\[
     {
         "value": {"string":{ "value": "Apple"}},
         "type": "string",
@@ -138,39 +58,123 @@ PS C:\>$Parameters =  @"
         "type": "number",
         "name": "b",
         "scope": "local"
-    }    
-]
+    }	
+\]
 }
 "@
 Invoke-vROWorkflow -ID c0278910-9ae2-46c5-bb45-2292fe88e3ab -Parameters ($Parameters | ConvertFrom-Json).parameters
 
-
-
-
--------------------------- EXAMPLE 5 --------------------------
-
-PS C:\>$Param1 = New-vROParameterDefinition -Name a -Value Apple -Type String -Scope LOCAL
-
+### -------------------------- EXAMPLE 4 --------------------------
+```
+$Param1 = New-vROParameterDefinition -Name a -Value Apple -Type String -Scope LOCAL
+```
 
 Invoke-vROWorkflow -Id c0278910-9ae2-46c5-bb45-2292fe88e3ab -Parameters $Param1
 
-
-
-
--------------------------- EXAMPLE 6 --------------------------
-
-PS C:\>Get-vROWorkflow -Name 'Test-Workflow' | Invoke-vROWorkflow -ParameterName a -ParameterValue 'Nature' 
--ParameterType String
-
-
-
-
-
-
-
--------------------------- EXAMPLE 7 --------------------------
-
-PS C:\>Get-vROWorkflow -Name 'Test-Workflow' | Select ItemHref | Invoke-vROWorkflow -ParameterName a -ParameterValue 
-'Junior' -ParameterType String
+### -------------------------- EXAMPLE 5 --------------------------
 ```
+Get-vROWorkflow -Name 'Test-Workflow' | Invoke-vROWorkflow -ParameterName a -ParameterValue 'Nature' -ParameterType String
+```
+
+## PARAMETERS
+
+### -Id
+vRO Workflow Id
+
+```yaml
+Type: String
+Parameter Sets: A
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+```yaml
+Type: String
+Parameter Sets: B
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -ParameterName
+Supply a single parameter to the workflow
+
+```yaml
+Type: String
+Parameter Sets: A, C
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ParameterValue
+Supply the value of the single parameter
+
+```yaml
+Type: String
+Parameter Sets: A, C
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ParameterType
+Supply the type of the single parameter
+
+```yaml
+Type: String
+Parameter Sets: A, C
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Parameters
+Supply workflow parameters via JSON or New-vROParameterDefinition
+
+```yaml
+Type: PSObject[]
+Parameter Sets: B, D
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+## INPUTS
+
+### System.String
+System.Switch
+
+## OUTPUTS
+
+### System.Management.Automation.PSObject.
+
+## NOTES
+
+## RELATED LINKS
 

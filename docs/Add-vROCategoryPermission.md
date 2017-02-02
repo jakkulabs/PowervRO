@@ -1,89 +1,119 @@
 # Add-vROCategoryPermission
 
 ## SYNOPSIS
-    
 Add a Permission to a vRO Category
 
 ## SYNTAX
- Add-vROCategoryPermission [-Id] <String[]> [-Principal] <String> [-Rights] <String[]> [-WhatIf] [-Confirm]  [<CommonParameters>]    
+
+```
+Add-vROCategoryPermission [-Id] <String[]> [-Principal] <String> [-Rights] <String[]> [-WhatIf] [-Confirm]
+```
 
 ## DESCRIPTION
-
 Add a Permission to a vRO Category
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Add-vROCategoryPermission -Id '40281e8654ddec6201553af63677146e' -Principal vRO_Users@vrademo.local -Rights 'View','Execute','Inspect'
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+$Permissions = Get-vROCategoryPermission -Id '40281e8654ddec6201553af63677146e'
+```
+
+Get-vROCategory -Id '40281e8654ddec6201554f5836651514' | Add-vROCategoryPermission -Principal $Permissions\[0\].Principal -Rights $Permissions\[0\].Rights
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 Category Id
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### Principal
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
-Specify the Permission Principal. Needs to be in the format user@domain or domain\user
+### -Principal
+Specify the Permission Principal.
+Needs to be in the format user@domain or domain\user
 
-* Required: true
-* Position: 2
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Rights
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Rights
 Specify the Permission Rights
 
-* Required: true
-* Position: 3
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
 
-### WhatIf
+Required: True
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
-### Confirm
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
-* Required: false
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Add-vROCategoryPermission -Id '40281e8654ddec6201553af63677146e' -Principal vRO_Users@vrademo.local -Rights 
-'View','Execute','Inspect'
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>$Permissions = Get-vROCategoryPermission -Id '40281e8654ddec6201553af63677146e'
-
-
-Get-vROCategory -Id '40281e8654ddec6201554f5836651514' | Add-vROCategoryPermission -Principal 
-$Permissions[0].Principal -Rights $Permissions[0].Rights
-```
+## RELATED LINKS
 

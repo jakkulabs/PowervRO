@@ -1,60 +1,72 @@
 # Export-vROAction
 
 ## SYNOPSIS
-    
 Exports an action by its ID.
 
 ## SYNTAX
- Export-vROAction [-Id] <String> [[-Path] <String>] [<CommonParameters>]    
+
+```
+Export-vROAction [-Id] <String> [[-Path] <String>]
+```
 
 ## DESCRIPTION
-
 Exports an action by its ID.
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vROAction -Id 92768e86-d7bc-400d-bb6d-11e6e10eb133 | Export-vROAction -Path C:\Actions\Test01.action
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vROAction -Name Test01 -Category com.company.test | Export-vROAction
+```
 
 ## PARAMETERS
 
-
-### Id
-
+### -Id
 The id of the action
 
-* Required: true
-* Position: 1
-* Default value: 
-* Accept pipeline input: true (ByValue, ByPropertyName)
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
 
-### Path
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
 
-The resulting path. If this parameter is not passed the action will be exported to
+### -Path
+The resulting path.
+If this parameter is not passed the action will be exported to
 the current working directory.
 
-* Required: false
-* Position: 2
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 
 ## OUTPUTS
 
-System.IO.FileInfo
+### System.IO.FileInfo
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vROAction -Id 92768e86-d7bc-400d-bb6d-11e6e10eb133 | Export-vROAction -File C:\Actions\Test01.action
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vROAction -Name Test01 -Category com.company.test | Export-vROAction
-```
+## RELATED LINKS
 

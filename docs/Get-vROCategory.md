@@ -1,89 +1,107 @@
 # Get-vROCategory
 
 ## SYNOPSIS
-    
 Get vRO Categories
 
 ## SYNTAX
- Get-vROCategory [-Root] [<CommonParameters>] Get-vROCategory -CategoryType <String> [-Root] [<CommonParameters>] Get-vROCategory -Id <String> [<CommonParameters>]    
+
+### All (Default)
+```
+Get-vROCategory [-Root]
+```
+
+### CategoryType
+```
+Get-vROCategory -CategoryType <String> [-Root]
+```
+
+### Id
+```
+Get-vROCategory -Id <String>
+```
 
 ## DESCRIPTION
-
 Get vRO Categories
+
+## EXAMPLES
+
+### -------------------------- EXAMPLE 1 --------------------------
+```
+Get-vROCategory
+```
+
+### -------------------------- EXAMPLE 2 --------------------------
+```
+Get-vROCategory -CategoryType Workflow
+```
+
+### -------------------------- EXAMPLE 3 --------------------------
+```
+Get-vROCategory -Id '40281e8b555889520155588bc4c10f1c'
+```
+
+### -------------------------- EXAMPLE 4 --------------------------
+```
+Get-vROCategory -CategoryType ResourceElement -Root
+```
 
 ## PARAMETERS
 
-
-### CategoryType
-
+### -CategoryType
 Retrieve Category by CategoryType
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: CategoryType
+Aliases: 
 
-### Id
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Id
 Retrieve Category by Id
 
-* Required: true
-* Position: named
-* Default value: 
-* Accept pipeline input: false
+```yaml
+Type: String
+Parameter Sets: Id
+Aliases: 
 
-### Root
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
+### -Root
 Retrieve only Categories in the top-level folder root
 
-* Required: false
-* Position: named
-* Default value: False
-* Accept pipeline input: false
+```yaml
+Type: SwitchParameter
+Parameter Sets: All, CategoryType
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ## INPUTS
 
-System.String
+### System.String
 System.Switch
 
 ## OUTPUTS
 
-System.Management.Automation.PSObject.
+### System.Management.Automation.PSObject.
 
-## EXAMPLES
-```
--------------------------- EXAMPLE 1 --------------------------
+## NOTES
 
-PS C:\>Get-vROCategory
-
-
-
-
-
-
-
--------------------------- EXAMPLE 2 --------------------------
-
-PS C:\>Get-vROCategory -CategoryType Workflow
-
-
-
-
-
-
-
--------------------------- EXAMPLE 3 --------------------------
-
-PS C:\>Get-vROCategory -Id '40281e8b555889520155588bc4c10f1c'
-
-
-
-
-
-
-
--------------------------- EXAMPLE 4 --------------------------
-
-PS C:\>Get-vROCategory -CategoryType ResourceElement -Root
-```
+## RELATED LINKS
 
