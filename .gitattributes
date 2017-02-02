@@ -1,9 +1,15 @@
-bin/
 docs/ export-ignore
-Tests/ export-ignore
+test/ export-ignore
+.github/ export-ignore
+docker/ export-ignore
+CHANGELOG.md export-ignore
 README.md export-ignore
 mkdocs.yml export-ignore
 Get-PowervRO.ps1 export-ignore
+appveyor.yml export-ignore
+build.ps1 export-ignore
+build.psake.ps1 export-ignore
+build.settings.ps1 export-ignore
+ScriptAnalyzerSettings.psd1 export-ignore
 .gitignore export-ignore
 .gitattributes export-ignore
-build.ps1 export-ignore
