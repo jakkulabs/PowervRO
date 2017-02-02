@@ -28,6 +28,6 @@ Environment data
 ```powershell
 > $PSVersionTable
 
-> $vRAConnection
+> $vROConnection
 
 ```
