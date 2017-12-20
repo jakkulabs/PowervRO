@@ -12,7 +12,8 @@ Describe -Name 'Connectivity Tests' -Fixture {
 
     It -Name 'Connects to a vRO Server and generates a connection variable' -Test {
 
-        Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $JSON.Connection.Password -IgnoreCertRequirements
+        $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
+        Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
         $($Global:vROConnection.Version) | Should Be $true
     }
 }

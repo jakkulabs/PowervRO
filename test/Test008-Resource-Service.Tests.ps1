@@ -2,10 +2,11 @@
 $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
-$Connection = Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $JSON.Connection.Password -Port $JSON.Connection.Port -IgnoreCertRequirements
+$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
+$Connection = Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $ConnectionPassword -Port $JSON.Connection.Port -IgnoreCertRequirements
 
 # --- Create Category
-$Category = New-vROCategory -Name $JSON.Configuration.CategoryName -CategoryType ResourceElementCategory 
+$Category = New-vROCategory -Name $JSON.Configuration.CategoryName -CategoryType ResourceElementCategory
 
 # --- Tests
 Describe -Name 'Resource Element Tests' -Fixture {

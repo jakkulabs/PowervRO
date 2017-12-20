@@ -2,7 +2,8 @@
 $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
-$Connection = Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $JSON.Connection.Password -Port $JSON.Connection.Port -IgnoreCertRequirements
+$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
+$Connection = Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $ConnectionPassword -Port $JSON.Connection.Port -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'Workflow Execution Tests' -Fixture {
@@ -53,7 +54,7 @@ Describe -Name 'Workflow Execution Tests' -Fixture {
             "type": "$($JSON.Workflow.ParameterTypeBMultipleParameter)",
             "name": "$($JSON.Workflow.ParameterNameBMultipleParameter)",
             "scope": "local"
-        }	
+        }
 	]
 }
 "@
@@ -77,7 +78,7 @@ Describe -Name 'Workflow Execution Tests' -Fixture {
             "type": "$($JSON.Workflow.ParameterTypeBMultipleParameter)",
             "name": "$($JSON.Workflow.ParameterNameBMultipleParameter)",
             "scope": "local"
-        }	
+        }
 	]
 }
 "@
@@ -88,7 +89,7 @@ Describe -Name 'Workflow Execution Tests' -Fixture {
     It -Name "Return named Workflow Executions by Id $($JSON.Workflow.IdNoParameter)" -Test {
 
         $ExecutionsA = Get-vROWorkflowExecution -Id $JSON.Workflow.IdNoParameter
-        
+
         foreach ($Execution in $ExecutionsA){
 
             $Execution.Execution | Should Match $JSON.Workflow.IdNoParameter
@@ -98,7 +99,7 @@ Describe -Name 'Workflow Execution Tests' -Fixture {
     It -Name "Return named Workflow Executions by Name $($JSON.Workflow.NameNoParameter)" -Test {
 
         $ExecutionsB = Get-vROWorkflowExecution -Name $JSON.Workflow.NameNoParameter
-        
+
         foreach ($Execution in $ExecutionsB){
 
             $Execution.Name | Should Be $JSON.Workflow.NameNoParameter

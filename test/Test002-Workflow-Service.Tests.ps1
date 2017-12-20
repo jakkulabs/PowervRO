@@ -2,7 +2,8 @@
 $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
-$Connection = Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $JSON.Connection.Password -Port $JSON.Connection.Port -IgnoreCertRequirements
+$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
+$Connection = Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $ConnectionPassword -Port $JSON.Connection.Port -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'Workflow Tests' -Fixture {
@@ -22,7 +23,7 @@ Describe -Name 'Workflow Tests' -Fixture {
     It -Name "Return named Workflows by Wildcard $($JSON.Workflow.NameWildcard)" -Test {
 
         $WorkflowsC = Get-vROWorkflow -Name $JSON.Workflow.NameWildcard -Wildcard
-        
+
         foreach ($Workflow in $WorkflowsC){
 
             $Workflow.Name | Should Match $JSON.Workflow.NameWildcard
