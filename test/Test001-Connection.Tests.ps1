@@ -4,10 +4,12 @@ $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 # --- Tests
 Describe -Name 'Connectivity Tests' -Fixture {
 
-    It -Name "Attempting to ping the vRO Server $($JSON.Connection.vROServer)" -Test {
+    It -Name "Attempting to connect to the vR0 Appliance $($JSON.Connection.vROServer) on port 8281" -Test {
 
-        $Ping = Test-Connection -ComputerName $JSON.Connection.vROServer -Quiet
-        $Ping | Should be $true
+        $Connection = New-Object Net.Sockets.TcpClient
+        $Connection.ConnectASync($JSON.Connection.vROServer,8281) | Out-Null
+        $Connection | Should Be $true
+
     }
 
     It -Name 'Connects to a vRO Server and generates a connection variable' -Test {
