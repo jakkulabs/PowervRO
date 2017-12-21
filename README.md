@@ -7,9 +7,9 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 ### vRealize Orchestrator
 
-*6.1
-*7.0
-*7.0.1
+* 6.1
+* 7.0
+* 7.0.1
 
 ### PowerShell Editions
 
