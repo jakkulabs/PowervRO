@@ -2,7 +2,7 @@
 <#
     .SYNOPSIS
     Wrapper for Invoke-RestMethod with vRO specifics
-    
+
     .DESCRIPTION
     Wrapper for Invoke-RestMethod with vRO specifics
 
@@ -51,7 +51,7 @@
             "type": "number",
             "name": "b",
             "scope": "local"
-        }	
+        }
 	]
 }
 "@
@@ -83,7 +83,7 @@
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
     [String]$OutFile
-    )   
+    )
 
 # --- Test for existing connection to vRO
 if (-not $Global:vROConnection){
@@ -94,6 +94,7 @@ if (-not $Global:vROConnection){
     # --- Create Invoke-RestMethod Parameters
     $FullURI = "$($Global:vROConnection.Server)$($URI)"
 
+    # --- Add default headers if not passed
     if (!$PSBoundParameters.ContainsKey("Headers")){
 
         $Headers = @{
@@ -104,46 +105,61 @@ if (-not $Global:vROConnection){
         }
     }
 
+    # --- Set up default parmaeters
+    $Params = @{
+
+        Method = $Method
+        Headers = $Headers
+        Uri = $FullURI
+    }
+
+    if ($PSBoundParameters.ContainsKey("Body")) {
+
+        $Params.Add("Body", $Body)
+
+        # --- Log the payload being sent to the server
+        Write-Debug -Message $Body
+
+    }
+    elseif ($PSBoundParameters.ContainsKey("OutFile")) {
+
+        $Params.Add("OutFile", $OutFile)
+    }
+
+    # --- Support for PowerShell Core certificate checking
+
+    if (!($Global:vRAConnection.SignedCertificates) -and ($PSVersionTable.PSEdition -eq "Core")) {
+
+        $Params.Add("SkipCertificateCheck", $true)
+    }
+
     try {
+
+        # --- Use either Invoke-WebRequest or Invoke-RestMethod
 
         if ($PSBoundParameters.ContainsKey("WebRequest")) {
 
-            if ($PSBoundParameters.ContainsKey("Body")) {
-
-                $Response = Invoke-WebRequest -Method $Method -Headers $Headers -Uri $FullURI -Body $Body
-            }
-            else {
-                
-                $Response = Invoke-WebRequest -Method $Method -Headers $Headers -Uri $FullURI
-            }
+            Invoke-WebRequest @Params
         }
+
         else {
-            if ($PSBoundParameters.ContainsKey("Body")) {
-            
-                $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI -Body $Body
-            }
-            elseif ($PSBoundParameters.ContainsKey("OutFile")){
 
-                $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI -OutFile $OutFile
-            }
-            else {
-
-                $Response = Invoke-RestMethod -Method $Method -Headers $Headers -Uri $FullURI
-            }
+            Invoke-RestMethod @Params
         }
-
-        Write-Output $Response
     }
     catch [Exception] {
-        
-        throw $_.Exception.Message
+
+        $PSCmdlet.ThrowTerminatingError($PSitem)
     }
     finally {
 
-        # Workaround for bug in Invoke-RestMethod. Thanks to the PowerNSX guys for pointing this one out
-        # https://bitbucket.org/nbradford/powernsx/src
+        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
 
-        $ServicePoint = [System.Net.ServicePointManager]::FindServicePoint($FullURI)
-        $ServicePoint.CloseConnectionGroup("") | Out-Null
+            # Workaround for bug in Invoke-RestMethod. Thanks to the PowerNSX guys for pointing this one out
+            # https://bitbucket.org/nbradford/powernsx/src
+
+            $ServicePoint = [System.Net.ServicePointManager]::FindServicePoint($FullURI)
+            $ServicePoint.CloseConnectionGroup("") | Out-Null
+        }
     }
 }

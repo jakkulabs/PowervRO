@@ -24,8 +24,16 @@
     .PARAMETER IgnoreCertRequirements
     Ignore requirements to use fully signed certificates
 
+    .PARAMETER SslProtocol
+
+    Alternative Ssl protocol to use from the default
+    Requires vRA 7.x and above
+    Windows PowerShell: Ssl3, Tls, Tls11, Tls12
+    PowerShell Core: Tls, Tls11, Tls12
+
     .INPUTS
     System.String
+    System.SecureString
     Management.Automation.PSCredential
     Switch
 
@@ -68,7 +76,11 @@
 	[Management.Automation.PSCredential]$Credential,
 
     [Parameter(Mandatory=$false)]
-    [Switch]$IgnoreCertRequirements
+    [Switch]$IgnoreCertRequirements,
+
+    [parameter(Mandatory=$false)]
+    [ValidateSet('Ssl3', 'Tls', 'Tls11', 'Tls12')]
+    [String]$SslProtocol
 
     )
 
@@ -117,14 +129,24 @@
         $SignedCertificates = $false
     }
 
-    #--- Fix for vRO 7.0.1 Tls version
-    $SecurityProtocols = @(
-        [System.Net.SecurityProtocolType]::Ssl3,
-        [System.Net.SecurityProtocolType]::Tls,
-        [System.Net.SecurityProtocolType]::Tls12
-    )
+    # --- Security Protocol
+    $SslProtocolResult = 'Default'
 
-    [System.Net.ServicePointManager]::SecurityProtocol = $SecurityProtocols -join ","
+    if ($PSBoundParameters.ContainsKey("SslProtocol") ){
+
+        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+
+            $CurrentProtocols = ([System.Net.ServicePointManager]::SecurityProtocol).toString() -split ', '
+
+            if (!($SslProtocol -in $CurrentProtocols)){
+
+                [System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::$($SslProtocol)
+
+            }
+        }
+
+        $SslProtocolResult = $SslProtocol
+    }
 
     # --- Convert Secure Credentials
     if ($PSBoundParameters.ContainsKey("Credential")){
@@ -153,9 +175,8 @@
             EncodedPassword = $EncodedPassword
             Version = $Null
             APIVersion = $Null
-            EnabledSecurityProtocols = [System.Net.ServicePointManager]::SecurityProtocol
             SignedCertificates = $SignedCertificates
-
+            SslProtocol = $SslProtocolResult
         }
 
         # --- Update vROConnection with version information
@@ -169,14 +190,10 @@
         Invoke-vRORestMethod -Method Get -URI $URI -ErrorAction Stop | Out-Null
 
         Write-Output $Global:vROConnection
-
-
     }
     catch [Exception]{
 
         Remove-Variable -Name vROConnection -Scope Global -Force -ErrorAction SilentlyContinue
-        throw $_.Exception.Message
-
+        $PSCmdlet.ThrowTerminatingError($PSitem)
     }
-
 }
