@@ -5,9 +5,23 @@ Note: this module is not in any way developed or supported by anyone officially 
 
 ## Compatibility
 
-**vRO: version 6.1, 7.0 and 7.0.1**
+### vRealize Orchestrator
 
-**PowerShell: version 4 and 5**
+*6.1
+*7.0
+*7.0.1
+
+### PowerShell Editions
+
+#### Desktop
+
+* 5.1
+
+#### Core
+
+* 6.0.0-rc**
+
+** To get up and running with PowerShell Core follow the instructions for your operating system [here](https://github.com/PowerShell/PowerShell/blob/master/README.md#get-powershell).
 
 ## Authentication
 
@@ -15,16 +29,12 @@ Currently PowervRO only supports basic Authentication. If you are using one of t
 
 ## Download
 
-PowerShell v5 users: You grab the latest version of the module from the PowerShell Gallery by running the following command:
+PowerShell v5.1 & v6 users: You grab the latest version of the module from the PowerShell Gallery by running the following command:
 
 ```
-Install-Module -Name PowervRO
-```
 
-PowerShell v4 users: Try this handy one liner to download and install the module:
+Install-Module -Name PowervRO -Scope CurrentUser
 
-```
-(new-object Net.WebClient).DownloadString("https://raw.githubusercontent.com/jakkulabs/PowervRO/master/Get-PowervRO.ps1") | iex
 ```
 ## Documentation
 
