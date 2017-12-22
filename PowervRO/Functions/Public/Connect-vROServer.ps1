@@ -141,11 +141,23 @@
             if (!($SslProtocol -in $CurrentProtocols)){
 
                 [System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::$($SslProtocol)
-
             }
         }
 
         $SslProtocolResult = $SslProtocol
+    }
+    elseif ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+
+        # --- Set the default Security Protocol for Windows PS to be TLS 1.2
+        # --- vRO 7.x+ requires this
+        $CurrentProtocols = ([System.Net.ServicePointManager]::SecurityProtocol).toString() -split ', '
+
+        if (!($SslProtocol -in $CurrentProtocols)){
+
+            [System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::Tls12
+        }
+
+        $SslProtocolResult = 'Tls12'
     }
 
     # --- Convert Secure Credentials
