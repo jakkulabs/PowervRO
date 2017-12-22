@@ -42,6 +42,14 @@
 
     begin {
 
+        if ($IsWindows) {
+
+            $Delimiter = '\'
+        }
+        else {
+
+            $Delimiter = '/'
+        }
     }
 
     process {
@@ -69,22 +77,22 @@
                 if (!$PSBoundParameters.ContainsKey("Path")) {
 
                     Write-Verbose -Message "Path parameter not passed, exporting to current directory."
-                    $FullPath = "$($(Get-Location).Path)\$($Filename)"
+                    $FullPath = "$($(Get-Location).Path)$($Delimiter)$($Filename)"
 
                 }
                 else {
 
                     Write-Verbose -Message "Path parameter passed."
 
-                    if ($Path.EndsWith("\")) {
+                    if ($Path.EndsWith("$($Delimiter)")) {
 
                         Write-Verbose -Message "Ends with"
 
-                        $Path = $Path.TrimEnd("\")
+                        $Path = $Path.TrimEnd("$($Delimiter)")
 
                     }
 
-                    $FullPath = "$($Path)\$($FileName)"
+                    $FullPath = "$($Path)$($Delimiter)$($FileName)"
 
                 }
 
@@ -93,10 +101,10 @@
                 # --- PS Core does not have -Encoding Byte. Replaced with new parameter AsByteStream
                 if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
 
-                    $Request.Content | Set-Content -Path $File -Encoding Byte -Force
+                    $Request.Content | Set-Content -Path $FullPath -Encoding Byte -Force
                 }
                 else {
-                    $Request.Content | Set-Content -Path $File -AsByteStream -Force
+                    $Request.Content | Set-Content -Path $FullPath -AsByteStream -Force
                 }
 
                 # --- Output the result
