@@ -1,11 +1,11 @@
 ﻿function Export-vROPlugin {
 <#
     .SYNOPSIS
-    Exports a plugin. 
-    
+    Exports a plugin.
+
     .DESCRIPTION
-    Exports a plugin. 
-    
+    Exports a plugin.
+
     .PARAMETER Name
     The name of the plugin
 
@@ -32,8 +32,8 @@
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$Name,         
-    
+    [String]$Name,
+
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
     [String]$Path
@@ -41,23 +41,31 @@
     )
 
     begin {
-    
+
+        if ($IsWindows) {
+
+            $Delimiter = '\'
+        }
+        else {
+
+            $Delimiter = '/'
+        }
     }
 
     process {
 
         foreach ($PluginName in $Name){
 
-            try {    
- 
+            try {
+
                 $URI = "/vco/api/plugins/$($PluginName)"
 
                 $Headers = @{
-                
+
                     "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
                     "Accept" ="Application/json";
                     "Content-Type" = "application/zip;charset=UTF-8";
-                    
+
                 }
 
                 # --- Run vRO REST Request
@@ -69,23 +77,24 @@
 
                 if (!$PSBoundParameters.ContainsKey("Path")) {
 
+
                     Write-Verbose -Message "Path parameter not passed, exporting to current directory."
-                    $FullPath = "$($(Get-Location).Path)\$($Filename)"
+                    $FullPath = "$($(Get-Location).Path)$($Delimiter)$($Filename)"
 
                 }
                 else {
 
                     Write-Verbose -Message "Path parameter passed."
-                    
-                    if ($Path.EndsWith("\")) {
+
+                    if ($Path.EndsWith("$($Delimiter)")) {
 
                         Write-Verbose -Message "Ends with"
 
-                        $Path = $Path.TrimEnd("\")
+                        $Path = $Path.TrimEnd("$($Delimiter)")
 
                     }
-                    
-                    $FullPath = "$($Path)\$($FileName)"
+
+                    $FullPath = "$($Path)$($Delimiter)$($FileName)"
 
                 }
 
