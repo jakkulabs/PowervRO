@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Export a vRO Workflow to a .workflow file
-    
+
     .DESCRIPTION
     Export a vRO Workflow to a .workflow file
-    
+
     .PARAMETER Id
     Specify the ID of the vRO Workfow
 
@@ -20,7 +20,7 @@
 
     .NOTES
     Thanks to @burkeazbill for a few hints with this one https://github.com/burkeazbill/vroClientScripts
-    
+
     .EXAMPLE
     Export-vROWorkflow -Id "3f92d2dc-a9fa-4323-900b-ef97196184ea" -File C:\Workflows\Test01.workflow
 
@@ -33,17 +33,17 @@
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$Id,         
-    
+    [String]$Id,
+
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$File 
+    [String]$File
     )
 
     begin {
 
         $Headers = @{
-                
+
             "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
             "Accept" ="Application/zip";
             "Accept-Encoding" = "gzip, deflate";
@@ -55,16 +55,25 @@
 
         foreach ($WorkflowId in $Id){
 
-            try {    
- 
+            try {
+
                 $URI = "/vco/api/workflows/$($WorkflowId)"
 
                 # --- Run vRO REST Request
                 $Request = Invoke-vRORestMethod -Uri $URI -Method Get -Headers $Headers -WebRequest -Verbose:$VerbosePreference
-                $Request.Content | Set-Content -Path $File -Encoding Byte -Force
-        
+
+                # --- PS Core no longer has -Encoding Byte. Replaced with new parameter AsByteStream
+                if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+
+                    $Request.Content | Set-Content -Path $File -Encoding Byte -Force
+                }
+                else {
+                    $Request.Content | Set-Content -Path $File -AsByteStream -Force
+                }
+
+
                 # --- Output the result
-                Get-ChildItem -Path $File  
+                Get-ChildItem -Path $File
             }
             catch [Exception]{
 
