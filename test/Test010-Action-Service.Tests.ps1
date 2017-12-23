@@ -2,7 +2,8 @@
 $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
-$Connection = Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $JSON.Connection.Password -Port $JSON.Connection.Port -IgnoreCertRequirements
+$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
+$Connection = Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $ConnectionPassword -Port $JSON.Connection.Port -IgnoreCertRequirements
 
 # --- Create Category
 $Category = New-vROCategory -Name $JSON.Action.CategoryName -CategoryType ScriptModuleCategory
@@ -53,8 +54,8 @@ Describe -Name 'Action Tests' -Fixture {
 
         $Action = Get-vROAction -Name $JSON.Action.Name -Category $Category.Name
         $Action | Remove-vROActionPermission -Principal $JSON.Action.PermissionsPrincipal -Confirm:$False
-        $Permission = $Action | Get-vROActionPermission | Where-Object {$_.Principal -eq $JSON.Resource.PermissionsPrincipal} 
-        $Permission | Should Be $Null    
+        $Permission = $Action | Get-vROActionPermission | Where-Object {$_.Principal -eq $JSON.Resource.PermissionsPrincipal}
+        $Permission | Should Be $Null
 
     }
 

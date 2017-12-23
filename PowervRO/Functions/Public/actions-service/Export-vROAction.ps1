@@ -1,11 +1,11 @@
 ﻿function Export-vROAction {
 <#
     .SYNOPSIS
-    Exports an action by its ID. 
-    
+    Exports an action by its ID.
+
     .DESCRIPTION
-    Exports an action by its ID. 
-    
+    Exports an action by its ID.
+
     .PARAMETER Id
     The id of the action
 
@@ -32,8 +32,8 @@
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$Id,         
-    
+    [String]$Id,
+
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
     [String]$Path
@@ -41,24 +41,32 @@
     )
 
     begin {
-    
+
+        if ($IsWindows) {
+
+            $Delimiter = '\'
+        }
+        else {
+
+            $Delimiter = '/'
+        }
     }
 
     process {
 
         foreach ($ActionId in $Id){
 
-            try {    
- 
+            try {
+
                 $URI = "/vco/api/actions/$($ActionId)"
 
                 $Headers = @{
-                
+
                     "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
                     "Accept" ="Application/zip";
                     "Accept-Encoding" = "gzip, deflate";
                     "Content-Type" = "Application/zip;charset=utf-8";
-                    
+
                 }
 
                 # --- Run vRO REST Request
@@ -69,30 +77,38 @@
                 if (!$PSBoundParameters.ContainsKey("Path")) {
 
                     Write-Verbose -Message "Path parameter not passed, exporting to current directory."
-                    $FullPath = "$($(Get-Location).Path)\$($Filename)"
+                    $FullPath = "$($(Get-Location).Path)$($Delimiter)$($Filename)"
 
                 }
                 else {
 
                     Write-Verbose -Message "Path parameter passed."
-                    
-                    if ($Path.EndsWith("\")) {
+
+                    if ($Path.EndsWith("$($Delimiter)")) {
 
                         Write-Verbose -Message "Ends with"
 
-                        $Path = $Path.TrimEnd("\")
+                        $Path = $Path.TrimEnd("$($Delimiter)")
 
                     }
-                    
-                    $FullPath = "$($Path)\$($FileName)"
 
-                }                
+                    $FullPath = "$($Path)$($Delimiter)$($FileName)"
+
+                }
 
                 Write-Verbose -Message "Exporting action to $($FullPath)"
-                $Request.Content | Set-Content -Path $FullPath -Encoding Byte -Force        
+
+                # --- PS Core does not have -Encoding Byte. Replaced with new parameter AsByteStream
+                if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+
+                    $Request.Content | Set-Content -Path $FullPath -Encoding Byte -Force
+                }
+                else {
+                    $Request.Content | Set-Content -Path $FullPath -AsByteStream -Force
+                }
 
                 # --- Output the result
-                Get-ChildItem -Path $FullPath 
+                Get-ChildItem -Path $FullPath
 
             }
             catch [Exception]{

@@ -2,7 +2,8 @@
 $JSON = Get-Content .\Variables.json -Raw | ConvertFrom-JSON
 
 # --- Startup
-$Connection = Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $JSON.Connection.Password -Port $JSON.Connection.Port -IgnoreCertRequirements
+$ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
+$Connection = Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $ConnectionPassword -Port $JSON.Connection.Port -IgnoreCertRequirements
 
 # --- Tests
 Describe -Name 'Category Tests' -Fixture {
@@ -79,7 +80,7 @@ Describe -Name 'Category Tests' -Fixture {
             $CategoryG = Get-vROCategory -CategoryType $JSON.Category.WorkflowCategoryType -Root | Where-Object {$_.Name -eq $JSON.Category.WorkflowCategoryName}
         }
         catch [Exception]{
-            
+
             $Error[0].Exception | Should Be "The remote server returned an error: (404) Not Found."
         }
     }
@@ -91,7 +92,7 @@ Describe -Name 'Category Tests' -Fixture {
             $CategoryH = Get-vROCategory -CategoryType $JSON.Category.ScriptModuleCategoryType -Root | Where-Object {$_.Name -eq $JSON.Category.ScriptModuleCategoryName}
         }
         catch [Exception]{
-            
+
             $Error[0].Exception | Should Be "The remote server returned an error: (404) Not Found."
         }
     }
@@ -103,7 +104,7 @@ Describe -Name 'Category Tests' -Fixture {
             $CategoryI = Get-vROCategory -CategoryType $JSON.Category.ResourceElementCategoryType -Root | Where-Object {$_.Name -eq $JSON.Category.ResourceElementCategoryName}
         }
         catch [Exception]{
-            
+
             $Error[0].Exception | Should Be "The remote server returned an error: (404) Not Found."
         }
     }
@@ -115,7 +116,7 @@ Describe -Name 'Category Tests' -Fixture {
             $CategoryJ = Get-vROCategory -CategoryType $JSON.Category.ConfigurationElementCategoryType -Root | Where-Object {$_.Name -eq $JSON.Category.ConfigurationElementCategoryName}
         }
         catch [Exception]{
-            
+
             $Error[0].Exception | Should Be "The remote server returned an error: (404) Not Found."
         }
     }
@@ -134,7 +135,7 @@ Describe -Name 'Category Tests' -Fixture {
             $CategoryL = Get-vROCategory -CategoryType $JSON.Category.WorkflowCategoryType | Where-Object {$_.Name -eq $JSON.Category.WorkflowCategoryName}
         }
         catch [Exception]{
-            
+
             $Error[0].Exception | Should Be "The remote server returned an error: (404) Not Found."
         }
     }

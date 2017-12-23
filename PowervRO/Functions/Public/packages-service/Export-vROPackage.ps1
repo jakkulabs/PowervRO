@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Export a vRO Package to a .package file
-    
+
     .DESCRIPTION
     Export a vRO Package to a .package file
-    
+
     .PARAMETER Name
     Specify the Name of the vRO Package
 
@@ -27,7 +27,7 @@
 
     .NOTES
     Thanks to @burkeazbill for a few hints with this one https://github.com/burkeazbill/vroClientScripts
-    
+
     .EXAMPLE
     Export-vROPackage -Name "net.powervro.tests" -File C:\Packages\net.powervro.tests.package
 
@@ -40,8 +40,8 @@
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$Name,         
-    
+    [String]$Name,
+
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [String]$File,
@@ -55,9 +55,9 @@
     )
 
     begin {
-    
+
         $Headers = @{
-                
+
             "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
             "Accept" ="Application/zip";
             "Accept-Encoding" = "gzip, deflate";
@@ -65,7 +65,7 @@
         }
 
         if ($PSBoundParameters.ContainsKey('DontExportConfigurationAttributeValues')){
-            
+
             $ExportConfigurationAttributeValues = 'false'
         }
         else {
@@ -73,7 +73,7 @@
             $ExportConfigurationAttributeValues = 'true'
         }
         if ($PSBoundParameters.ContainsKey('DontExportGlobalTags')){
-            
+
             $ExportGlobalTags = 'false'
         }
         else {
@@ -86,16 +86,24 @@
 
         foreach ($PackageName in $Name){
 
-            try {    
- 
+            try {
+
                 $URI = "/vco/api/packages/$($PackageName)/?exportConfigurationAttributeValues=$($ExportConfigurationAttributeValues)&exportGlobalTags=$($ExportGlobalTags)"
 
                 # --- Run vRO REST Request
                 $Request = Invoke-vRORestMethod -Uri $URI -Method Get -Headers $Headers -WebRequest -Verbose:$VerbosePreference
-                $Request.Content | Set-Content -Path $File -Encoding Byte -Force
-        
+
+                # --- PS Core does not have -Encoding Byte. Replaced with new parameter AsByteStream
+                if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+
+                    $Request.Content | Set-Content -Path $File -Encoding Byte -Force
+                }
+                else {
+                    $Request.Content | Set-Content -Path $File -AsByteStream -Force
+                }
+
                 # --- Output the result
-                Get-ChildItem -Path $File  
+                Get-ChildItem -Path $File
             }
             catch [Exception]{
 

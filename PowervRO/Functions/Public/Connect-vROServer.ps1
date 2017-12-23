@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Connect to a vRO Server
-    
+
     .DESCRIPTION
     Connect to a vRO Server and generate a connection object with Servername, Token etc
-    
+
     .PARAMETER Server
     vRO Server to connect to
 
@@ -24,8 +24,16 @@
     .PARAMETER IgnoreCertRequirements
     Ignore requirements to use fully signed certificates
 
+    .PARAMETER SslProtocol
+
+    Alternative Ssl protocol to use from the default
+    Requires vRA 7.x and above
+    Windows PowerShell: Ssl3, Tls, Tls11, Tls12
+    PowerShell Core: Tls, Tls11, Tls12
+
     .INPUTS
     System.String
+    System.SecureString
     Management.Automation.PSCredential
     Switch
 
@@ -33,10 +41,11 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-    Connect-vROServer -Server vro01.domain.local -Username TenantAdmin01 -Password P@ssword -IgnoreCertRequirements
+    Connect-vROServer -Server vro01.domain.local -Credential (Get-Credential)
 
     .EXAMPLE
-    Connect-vROServer -Server vro01.domain.local -Credential (Get-Credential)
+    $SecurePassword = ConvertTo-SecureString “P@ssword” -AsPlainText -Force
+    Connect-vROServer -Server vro01.domain.local -Username TenantAdmin01 -Password $SecurePassword -IgnoreCertRequirements
 
     .EXAMPLE
     Connect-vROServer -Server vro01.domain.local -Port 443 -Credential (Get-Credential)
@@ -52,29 +61,33 @@
 
     [Parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
-    [Int]$Port = 8281,    
-    
+    [Int]$Port = 8281,
+
     [Parameter(Mandatory=$true,ParameterSetName="Username")]
     [ValidateNotNullOrEmpty()]
     [String]$Username,
 
     [Parameter(Mandatory=$true,ParameterSetName="Username")]
     [ValidateNotNullOrEmpty()]
-    [String]$Password,
+    [SecureString]$Password,
 
     [Parameter(Mandatory=$true,ParameterSetName="Credential")]
 	[ValidateNotNullOrEmpty()]
 	[Management.Automation.PSCredential]$Credential,
 
     [Parameter(Mandatory=$false)]
-    [Switch]$IgnoreCertRequirements
+    [Switch]$IgnoreCertRequirements,
 
-    )       
+    [parameter(Mandatory=$false)]
+    [ValidateSet('Ssl3', 'Tls', 'Tls11', 'Tls12')]
+    [String]$SslProtocol
+
+    )
 
     # --- Test Connectivity to vRO Server on the given port
     try {
 
-        # --- Test Connection to the vRO Server   
+        # --- Test Connection to the vRO Server
         Write-Verbose -Message "Testing connectivity to $($Server):$($Port)"
 
         $TCPClient = New-Object Net.Sockets.TcpClient
@@ -89,65 +102,93 @@
 
     }
 
-    # --- Work with Untrusted Certificates
+    # --- Handle untrusted certificates if necessary
+    $SignedCertificates = $true
+
     if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements")){
 
-        if ( -not ("TrustAllCertsPolicy" -as [type])) {
+        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
 
-        Add-Type @"
-        using System.Net;
-        using System.Security.Cryptography.X509Certificates;
-        public class TrustAllCertsPolicy : ICertificatePolicy {
-            public bool CheckValidationResult(
-                ServicePoint srvPoint, X509Certificate certificate,
-                WebRequest request, int certificateProblem) {
-                return true;
+            if ( -not ("TrustAllCertsPolicy" -as [type])) {
+
+            Add-Type @"
+            using System.Net;
+            using System.Security.Cryptography.X509Certificates;
+            public class TrustAllCertsPolicy : ICertificatePolicy {
+                public bool CheckValidationResult(
+                    ServicePoint srvPoint, X509Certificate certificate,
+                    WebRequest request, int certificateProblem) {
+                    return true;
+                }
             }
-        }
 "@
+            }
+            [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
         }
-        [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+
         $SignedCertificates = $false
     }
-    else {
 
-        $SignedCertificates = $true
+    # --- Security Protocol
+    $SslProtocolResult = 'Default'
+
+    if ($PSBoundParameters.ContainsKey("SslProtocol") ){
+
+        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+
+            $CurrentProtocols = ([System.Net.ServicePointManager]::SecurityProtocol).toString() -split ', '
+
+            if (!($SslProtocol -in $CurrentProtocols)){
+
+                [System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::$($SslProtocol)
+            }
+        }
+
+        $SslProtocolResult = $SslProtocol
+    }
+    elseif ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+
+        # --- Set the default Security Protocol for Windows PS to be TLS 1.2
+        # --- vRO 7.x+ requires this
+        $CurrentProtocols = ([System.Net.ServicePointManager]::SecurityProtocol).toString() -split ', '
+
+        if (!($SslProtocol -in $CurrentProtocols)){
+
+            [System.Net.ServicePointManager]::SecurityProtocol += [System.Net.SecurityProtocolType]::Tls12
+        }
+
+        $SslProtocolResult = 'Tls12'
     }
 
-    #--- Fix for vRO 7.0.1 Tls version
-    $SecurityProtocols = @(
-        [System.Net.SecurityProtocolType]::Ssl3,
-        [System.Net.SecurityProtocolType]::Tls,
-        [System.Net.SecurityProtocolType]::Tls12
-    )
-
-    [System.Net.ServicePointManager]::SecurityProtocol = $SecurityProtocols -join ","
-
+    # --- Convert Secure Credentials
     if ($PSBoundParameters.ContainsKey("Credential")){
 
         $Username = $Credential.UserName
-        $Password = $Credential.GetNetworkCredential().Password
-        
-    }          
-       
+        $ConnectionPassword = $Credential.GetNetworkCredential().Password
+
+    }
+    if ($PSBoundParameters.ContainsKey("Password")){
+
+        $ConnectionPassword = (New-Object System.Management.Automation.PSCredential("username", $Password)).GetNetworkCredential().Password
+    }
+
     try {
 
         # --- Set Encoded Password
-        $Auth = $Username + ':' + $Password
+        $Auth = $Username + ':' + $ConnectionPassword
         $Encoded = [System.Text.Encoding]::UTF8.GetBytes($Auth)
         $EncodedPassword = [System.Convert]::ToBase64String($Encoded)
-            
-        # --- Create Output Object                
-        $Global:vROConnection = [pscustomobject]@{                        
-                        
+
+        # --- Create Output Object
+        $Global:vROConnection = [pscustomobject]@{
+
             Server = "https://$($Server):$($Port)"
             Username = $Username
             EncodedPassword = $EncodedPassword
             Version = $Null
             APIVersion = $Null
-            EnabledSecurityProtocols = [System.Net.ServicePointManager]::SecurityProtocol
             SignedCertificates = $SignedCertificates
-
+            SslProtocol = $SslProtocolResult
         }
 
         # --- Update vROConnection with version information
@@ -161,14 +202,10 @@
         Invoke-vRORestMethod -Method Get -URI $URI -ErrorAction Stop | Out-Null
 
         Write-Output $Global:vROConnection
-
-
     }
     catch [Exception]{
 
         Remove-Variable -Name vROConnection -Scope Global -Force -ErrorAction SilentlyContinue
-        throw $_.Exception.Message
-
+        $PSCmdlet.ThrowTerminatingError($PSitem)
     }
-
 }
