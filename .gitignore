@@ -1,2 +1,4 @@
-test/*.json
-
+*.xml
+*.zip
+tests/*.json
+Release/
