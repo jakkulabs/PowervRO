@@ -1,3 +1,5 @@
+![Build status](https://jakkulabs.visualstudio.com/_apis/public/build/definitions/b9938934-bc30-4bf9-8ee8-91138dde4db8/2/badge)
+
 # Welcome to PowervRO
 PowervRO is a PowerShell module built on top of the services exposed by the vRealize Orchestrator REST API.
 
