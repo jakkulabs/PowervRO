@@ -1,0 +1,4 @@
+*.xml
+*.zip
+tests/*.json
+Release/

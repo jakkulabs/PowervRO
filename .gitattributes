@@ -1,9 +1,15 @@
-bin/
-docs/ export-ignore
-Tests/ export-ignore
-README.md export-ignore
-mkdocs.yml export-ignore
-Get-PowervRO.ps1 export-ignore
 .gitignore export-ignore
 .gitattributes export-ignore
-build.ps1 export-ignore
+.github/ export-ignore
+docs/ export-ignore
+tests/ export-ignore
+tools/ export-ignore
+docker/ export-ignore
+media/ export-ignore
+LICENCE export-ignore
+RELEASE.md export-ignore
+README.md export-ignore
+mkdocs.yml export-ignore
+
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
