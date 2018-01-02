@@ -107,7 +107,7 @@
 
     if ($PSBoundParameters.ContainsKey("IgnoreCertRequirements")){
 
-        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+        if (!$IsCoreCLR) {
 
             if ( -not ("TrustAllCertsPolicy" -as [type])) {
 
@@ -134,7 +134,7 @@
 
     if ($PSBoundParameters.ContainsKey("SslProtocol") ){
 
-        if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+        if (!$IsCoreCLR) {
 
             $CurrentProtocols = ([System.Net.ServicePointManager]::SecurityProtocol).toString() -split ', '
 
@@ -146,7 +146,7 @@
 
         $SslProtocolResult = $SslProtocol
     }
-    elseif ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+    elseif (!$IsCoreCLR) {
 
         # --- Set the default Security Protocol for Windows PS to be TLS 1.2
         # --- vRO 7.x+ requires this
