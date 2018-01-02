@@ -63,7 +63,7 @@
                 $Request = Invoke-vRORestMethod -Uri $URI -Method Get -Headers $Headers -WebRequest -Verbose:$VerbosePreference
 
                 # --- PS Core does not have -Encoding Byte. Replaced with new parameter AsByteStream
-                if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+                if (!$IsCoreCLR) {
 
                     $Request.Content | Set-Content -Path $File -Encoding Byte -Force
                 }

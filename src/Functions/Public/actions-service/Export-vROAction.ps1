@@ -99,7 +99,7 @@
                 Write-Verbose -Message "Exporting action to $($FullPath)"
 
                 # --- PS Core does not have -Encoding Byte. Replaced with new parameter AsByteStream
-                if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+                if (!$IsCoreCLR) {
 
                     $Request.Content | Set-Content -Path $FullPath -Encoding Byte -Force
                 }

@@ -29,7 +29,7 @@
             # --- Remove custom Security Protocol if it has been specified
             if ($Global:vROConnection.SslProtocol -ne 'Default'){
 
-                if ($PSVersionTable.PSEdition -eq "Desktop" -or !$PSVersionTable.PSEdition) {
+                if (!$IsCoreCLR) {
 
                     [System.Net.ServicePointManager]::SecurityProtocol -= [System.Net.SecurityProtocolType]::$($Global:vROConnection.SslProtocol)
                 }
