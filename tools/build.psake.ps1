@@ -223,7 +223,6 @@ copyright: "$($ModuleName) is licensed under the <a href='$($RepositoryUrl)/raw/
 pages:
 - 'Home' : 'index.md'
 - 'Change log' : 'CHANGELOG.md'
-- 'Build' : 'build.md'
 - 'Functions': $($Functions -join "`r")
 "@
     
