@@ -30,7 +30,7 @@
     Description       = 'PowerShell Module for Managing VMware vRealize Orchestrator'
 
     # Minimum version of the Windows PowerShell engine required by this module
-    PowerShellVersion = '4.0'
+    PowerShellVersion = '5.1'
 
     # Name of the Windows PowerShell host required by this module
     # PowerShellHostName = ''
@@ -101,10 +101,10 @@
             ProjectUri = 'https://github.com/jakkulabs/PowervRO'
 
             # A URL to an icon representing this module.
-            IconUri = 'https://raw.githubusercontent.com/jakkulabs/PowervRO/master/media/PowervRA-icon.png'
+            IconUri = 'https://raw.githubusercontent.com/jakkulabs/PowervRO/master/media/PowervRO-icon.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = 'https://raw.githubusercontent.com/jakkulabs/PowervRA/master/docs/CHANGELOG.md'
+            ReleaseNotes = 'https://raw.githubusercontent.com/jakkulabs/PowervRO/master/docs/CHANGELOG.md'
 
             # External dependent modules of this module
             # ExternalModuleDependencies = ''
