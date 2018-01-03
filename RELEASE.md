@@ -1,11 +1,11 @@
-PowervRO v1.0.0 includes support for the following services:
+## Breaking Changes
+**WARNING: This release contains breaking changes**
+* The minmum supported PowerShell Versions have been raised to the following:
+  * Windows PowerShell: 5.1
+  * PowerShell Core: 6.0.0-rc**
 
-actions-service
-category-service
-packages-service
-plugin-service
-resource-service
-service-descriptor-service
-user-service
-workflow-run-service
-workflow-service
+## Features
+* Feature - Updates to support PowerShell Core
+* Feature - Set the default Security Protocol on Windows PS to be Tls12
+* Feature - Updates to use $IsCoreCLR inbuilt variable
+* Feature - Module restructured to single PSM1 file
