@@ -37,14 +37,14 @@ Install-Module -Name PowervRO -Scope CurrentUser
 ## Running Locally
 When developing, use the provided build script and import the module that is inside the Release directory. 
 
-You **do not** have to manually edit src\PowervRA.psd1 when adding new functions
+You **do not** have to manually edit src\PowervRO.psd1 when adding new functions
 
 ```PowerShell
 # --- Run the build script
 .\tools\build.ps1
 
 # --- Import release module
-Import-Module .\Release\PowervRA\PowervRA.psd1 -Force
+Import-Module .\Release\PowervRO\PowervRO.psd1 -Force
 ```
 The default build will run some quick tests to catch any errors before you push your changes.
 ## Documentation
