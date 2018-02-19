@@ -1,3 +1,11 @@
+# Version 2.0.1
+
+## Features
+* Feature - Listed as PS Core compatible module in PS Gallery
+
+## Fixes
+* Fixed #9 - Typo: $Global:vRAConnection
+
 # Version 2.0.0
 
 ## Breaking Changes
