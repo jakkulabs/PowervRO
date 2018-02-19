@@ -127,7 +127,7 @@ if (-not $Global:vROConnection){
     }
 
     # --- Support for PowerShell Core certificate checking
-    if (!($Global:vRAConnection.SignedCertificates) -and ($IsCoreCLR)) {
+    if (!($Global:vROConnection.SignedCertificates) -and ($IsCoreCLR)) {
 
         $Params.Add("SkipCertificateCheck", $true)
     }
