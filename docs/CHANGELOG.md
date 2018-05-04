@@ -1,3 +1,8 @@
+# Version 2.0.2
+
+## Fixes
+* Fixed #12 - Export-vROResourceElement not UTF8 friendly
+
 # Version 2.0.1
 
 ## Features
