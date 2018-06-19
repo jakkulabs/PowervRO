@@ -148,7 +148,7 @@
                     
             StatusCode = $InvokeRequest.StatusCode
             StatusDescription = $InvokeRequest.StatusDescription
-            Execution = $InvokeRequest.Headers.Location
+            Execution = ([System.Uri]$InvokeRequest.Headers.Location[0]).LocalPath
         }
     }
     catch [Exception]{
