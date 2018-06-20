@@ -1,2 +1,2 @@
 ## Fixes
-* Fixed #12 - Export-vROResourceElement not UTF8 friendly
+* Fixed #15 - Object returned by Invoke-vROWorkflow can not be pipelined to other cmdlets (@voroniys)

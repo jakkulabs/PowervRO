@@ -1,3 +1,8 @@
+# Version 2.0.3
+
+## Fixes
+* Fixed #15 - Object returned by Invoke-vROWorkflow can not be pipelined to other cmdlets (@voroniys)
+
 # Version 2.0.2
 
 ## Fixes
