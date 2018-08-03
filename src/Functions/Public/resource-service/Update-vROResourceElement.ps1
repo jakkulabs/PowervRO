@@ -1,16 +1,16 @@
 function Update-vROResourceElement {
 <#
     .SYNOPSIS
-    Updates a resource element based of the resource ID.    
+    Updates a resource element based off the resource ID.    
 
     .DESCRIPTION
-    Updates a resource element based of the resource ID. 
+    Updates a resource element based off the resource ID. 
 
     .PARAMETER ResourceID
     The ID of the Resource
 
     .PARAMETER File
-    The resouce file
+    The resource file
 
     .INPUTS
     System.String
