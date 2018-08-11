@@ -1,4 +1,4 @@
-function Update-vROResourceElement {
+function Set-vROResourceElement {
 <#
     .SYNOPSIS
     Updates a resource element based off the resource ID.    
@@ -19,7 +19,7 @@ function Update-vROResourceElement {
     None
 
     .EXAMPLE
-    Get-ChildItem -Path "C:\Resources\$file" | Update-vROResourceElement -ResourceID $resource.Id -Confirm:$false
+    Get-ChildItem -Path "C:\Resources\$file" |Set-vROResourceElement -ResourceID $resource.Id -Confirm:$false
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
