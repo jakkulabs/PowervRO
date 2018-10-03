@@ -6,8 +6,11 @@
     .DESCRIPTION
     Get vRO Workflows
 
-    .PARAMETER Category
-    Retrieve workflow by Category
+    .PARAMETER CategoryName
+    Retrieve workflow by Category Name
+
+    .PARAMETER CategoryId
+    Retrieve workflow by Category Id
 
     .PARAMETER Id
     Retrieve workflow by Id
@@ -26,27 +29,34 @@
     System.Management.Automation.PSObject.
 
     .EXAMPLE
-	Get-vROWorkflow
+    Get-vROWorkflow
 
     .EXAMPLE
-	Get-vROWorkflow -Category Dev
+    Get-vROWorkflow -CategoryName Dev
 
     .EXAMPLE
-	Get-vROWorkflow -Id '3f92d2dc-a9fa-4323-900b-ef97196184ea'
+    Get-vROWorkflow -CategoryId 2c94c8b464fa5d6e0164ff48ac54070a
 
     .EXAMPLE
-	Get-vROWorkflow -Name 'New-DRSRule'
+    Get-vROWorkflow -Id '3f92d2dc-a9fa-4323-900b-ef97196184ea'
 
     .EXAMPLE
-	Get-vROWorkflow -Name 'New' -Wildcard
+    Get-vROWorkflow -Name 'New-DRSRule'
+
+    .EXAMPLE
+    Get-vROWorkflow -Name 'New' -Wildcard
 #>
 [CmdletBinding(DefaultParametersetName="All")][OutputType('System.Management.Automation.PSObject')]
 
     Param
-    (   
-    
-    [parameter(Mandatory=$false,ParameterSetName="Category")]
-    [String]$Category,
+    (
+
+    [parameter(Mandatory=$false,ParameterSetName="CategoryName")]
+    [Alias("Category")]
+    [String]$CategoryName,
+
+    [parameter(Mandatory=$false,ParameterSetName="CategoryId")]
+    [String]$CategoryId,
 
     [parameter(Mandatory=$false,ParameterSetName="Id")]
     [String]$Id,
@@ -61,23 +71,29 @@
 
     try {
 
-        # --- Send REST call and process results            
-        switch ($PsCmdlet.ParameterSetName) {
+        # --- Send REST call and process results
+        switch ($PsCmdlet.ParameterSetName){
 
-            "All"  { 
-        
+            "All" {
+
                 $URI = "/vco/api/workflows"
                 break
             }
 
-            "Category"  {
-            
-                $URI = "/vco/api/workflows/?conditions=categoryName=$($Category)"
+            "CategoryName" {
+
+                $URI = "/vco/api/workflows/?conditions=categoryName=$($CategoryName)"
                 break
             }
 
-            "Id"  {
-            
+            "CategoryId" {
+
+                $URI = "/vco/api/catalog/System/WorkflowCategory/$($CategoryId)/workflows"
+                break
+            }
+
+            "Id" {
+
                 $URI = "/vco/api/workflows/$($Id)"
                 break
 
@@ -87,7 +103,7 @@
 
                 if ($PSBoundParameters.ContainsKey('Wildcard')){
 
-                    $URI = "/vco/api/workflows/?conditions=name~$($Name)"                
+                    $URI = "/vco/api/workflows/?conditions=name~$($Name)"
                 }
                 else {
 
@@ -97,48 +113,74 @@
             }
         }
 
-        if ($PsCmdlet.ParameterSetName -eq 'Id'){
+        switch ($PsCmdlet.ParameterSetName){
 
-            $Workflow = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
+            "Id" {
 
-            [pscustomobject]@{                        
-                    
-                Name = $Workflow.name
-                ID = $Workflow.id
-                Description = $Workflow.description
-                ItemHref = $Workflow.href
-                Version = $Workflow.version
-                CategoryName = $null
-                CategoryHref = $null
-                CustomIcon = $Workflow.'customized-icon'
-                CanExecute = $null
-                CanEdit = $null
-           }
-        }
-        else {
-         
-        $Workflows = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
+                $Workflow = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
 
-            foreach ($Workflow in $Workflows.link){
+                [pscustomobject]@{
 
-                [pscustomobject]@{                        
-                    
-                    Name = ($Workflow.attributes | Where-Object {$_.name -eq 'name'}).value
-                    ID = ($Workflow.attributes | Where-Object {$_.name -eq 'id'}).value
-                    Description = ($Workflow.attributes | Where-Object {$_.name -eq 'description'}).value
-                    ItemHref = ($Workflow.attributes | Where-Object {$_.name -eq 'itemHref'}).value
-                    Version = ($Workflow.attributes | Where-Object {$_.name -eq 'version'}).value
-                    CategoryName = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryName'}).value
-                    CategoryHref = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryHref'}).value
-                    CustomIcon = ($Workflow.attributes | Where-Object {$_.name -eq 'customIcon'}).value
-                    CanExecute = ($Workflow.attributes | Where-Object {$_.name -eq 'canExecute'}).value
-                    CanEdit = ($Workflow.attributes | Where-Object {$_.name -eq 'canEdit'}).value
+                    Name = $Workflow.name
+                    ID = $Workflow.id
+                    Description = $Workflow.description
+                    ItemHref = $Workflow.href
+                    Version = $Workflow.version
+                    CategoryName = $null
+                    CategoryHref = $null
+                    CustomIcon = $Workflow.'customized-icon'
+                    CanExecute = $null
+                    CanEdit = $null
                 }
             }
-        } 
+
+            "CategoryId" {
+
+                $Workflows = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
+
+                foreach ($Workflow in $Workflows.link){
+
+                    [pscustomobject]@{
+
+                        Name = ($Workflow.attributes | Where-Object {$_.name -eq 'name'}).value
+                        ID = ($Workflow.attributes | Where-Object {$_.name -eq 'id'}).value
+                        Description = ($Workflow.attributes | Where-Object {$_.name -eq 'description'}).value
+                        ItemHref = $Workflow.href
+                        Version = ($Workflow.attributes | Where-Object {$_.name -eq 'version'}).value
+                        CategoryName = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryName'}).value
+                        CategoryHref = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryHref'}).value
+                        CustomIcon = ($Workflow.attributes | Where-Object {$_.name -eq 'customIcon'}).value
+                        CanExecute = ($Workflow.attributes | Where-Object {$_.name -eq 'canExecute'}).value
+                        CanEdit = ($Workflow.attributes | Where-Object {$_.name -eq 'canEdit'}).value
+                    }
+                }
+            }
+
+            default {
+
+                $Workflows = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
+
+                foreach ($Workflow in $Workflows.link){
+
+                    [pscustomobject]@{
+
+                        Name = ($Workflow.attributes | Where-Object {$_.name -eq 'name'}).value
+                        ID = ($Workflow.attributes | Where-Object {$_.name -eq 'id'}).value
+                        Description = ($Workflow.attributes | Where-Object {$_.name -eq 'description'}).value
+                        ItemHref = ($Workflow.attributes | Where-Object {$_.name -eq 'itemHref'}).value
+                        Version = ($Workflow.attributes | Where-Object {$_.name -eq 'version'}).value
+                        CategoryName = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryName'}).value
+                        CategoryHref = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryHref'}).value
+                        CustomIcon = ($Workflow.attributes | Where-Object {$_.name -eq 'customIcon'}).value
+                        CanExecute = ($Workflow.attributes | Where-Object {$_.name -eq 'canExecute'}).value
+                        CanEdit = ($Workflow.attributes | Where-Object {$_.name -eq 'canEdit'}).value
+                    }
+                }
+            }
+        }
     }
     catch [Exception]{
-        
+
         throw
     }
 }
