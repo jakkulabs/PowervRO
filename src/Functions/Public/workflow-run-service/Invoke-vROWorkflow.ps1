@@ -142,13 +142,26 @@
 
         $URI = "/vco/api/workflows/$($Id)/executions/"
 
-        $InvokeRequest = Invoke-vRORestMethod -Method POST -URI $URI -Body $Body -WebRequest -Verbose:$VerbosePreference                 
-        
-        [pscustomobject]@{
-                    
-            StatusCode = $InvokeRequest.StatusCode
-            StatusDescription = $InvokeRequest.StatusDescription
-            Execution = ([System.Uri]$InvokeRequest.Headers.Location[0]).LocalPath
+        $InvokeRequest = Invoke-vRORestMethod -Method POST -URI $URI -Body $Body -WebRequest -Verbose:$VerbosePreference
+
+        # --- System.Uri gives different output type in Windows PS vs PS Core
+        if ($IsCoreCLR) {
+
+            [pscustomobject]@{
+                        
+                StatusCode = $InvokeRequest.StatusCode
+                StatusDescription = $InvokeRequest.StatusDescription
+                Execution = ([System.Uri]$InvokeRequest.Headers.Location[0]).LocalPath
+            }
+        }
+        else {
+            
+            [pscustomobject]@{
+
+                StatusCode = $InvokeRequest.StatusCode
+                StatusDescription = $InvokeRequest.StatusDescription
+                Execution = ([System.Uri]$InvokeRequest.Headers.Location).LocalPath
+            }
         }
     }
     catch [Exception]{
