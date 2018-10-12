@@ -6,7 +6,7 @@ function Set-vROResourceElement {
     .DESCRIPTION
     Updates a resource element based off the resource ID. 
 
-    .PARAMETER ResourceID
+    .PARAMETER Id
     The ID of the Resource
 
     .PARAMETER File
@@ -19,7 +19,7 @@ function Set-vROResourceElement {
     None
 
     .EXAMPLE
-    Get-ChildItem -Path "C:\Resources\$file" |Set-vROResourceElement -ResourceID $resource.Id -Confirm:$false
+    Get-ChildItem -Path "C:\Resources\$file" |Set-vROResourceElement -Id $resource.Id -Confirm:$false
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
@@ -28,7 +28,7 @@ function Set-vROResourceElement {
 
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$ResourceID,         
+    [String]$Id,         
     
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
@@ -65,7 +65,7 @@ function Set-vROResourceElement {
                     "--$($Boundary)--$($LF)"
                 ) -join $LF
 
-                $URI = "/vco/api/resources/$($ResourceID)"
+                $URI = "/vco/api/resources/$($Id)"
 
                 # --- Set custom headers for the request
                 $Headers = @{
