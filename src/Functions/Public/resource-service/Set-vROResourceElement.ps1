@@ -19,7 +19,7 @@ function Set-vROResourceElement {
     None
 
     .EXAMPLE
-    Get-ChildItem -Path "C:\Resources\$file" |Set-vROResourceElement -Id $resource.Id -Confirm:$false
+    Get-ChildItem -Path "C:\Resources\$file" | Set-vROResourceElement -Id $resource.Id -Confirm:$false
 
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")][OutputType('System.Management.Automation.PSObject')]
