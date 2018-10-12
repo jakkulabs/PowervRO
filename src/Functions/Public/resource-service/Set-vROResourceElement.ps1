@@ -76,7 +76,7 @@ function Set-vROResourceElement {
                     "Content-Type" = "multipart/form-data; boundary=$($Boundary)"
                 }
 
-                if ($PSCmdlet.ShouldProcess($FileInfo.FullName)){
+                if ($PSCmdlet.ShouldProcess($Id)){
 
                     # --- Run vRO REST Request
                     Invoke-vRORestMethod -Method POST -Uri $URI -Body $Form -Headers $Headers -Verbose:$VerbosePreference | Out-Null
