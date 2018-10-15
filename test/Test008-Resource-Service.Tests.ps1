@@ -73,6 +73,14 @@ Describe -Name 'Resource Element Tests' -Fixture {
         $ExportedResourceElement | Should Not Be $Null
 
     }
+    
+    It -Name "Set named Resource Element" -Test {
+
+        Set-vROResourceElement -File $JSON.Resource.FileName -ResourceID $Resource.Id -Confirm:$False
+        $SetResourceElement = Get-vROResourceElement | Where-Object {$_.Name -eq $JSON.Resource.Name}
+        $SetResourceElement.Name | Should Be $JSON.Resource.Name
+
+    }
 
     It -Name "Remove named Resource Element" -Test {
 
@@ -83,6 +91,7 @@ Describe -Name 'Resource Element Tests' -Fixture {
         $RemovedResourceElement | Should Be $Null
 
     }
+
 
 }
 
