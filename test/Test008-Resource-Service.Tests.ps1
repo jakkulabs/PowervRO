@@ -76,7 +76,7 @@ Describe -Name 'Resource Element Tests' -Fixture {
     
     It -Name "Set named Resource Element" -Test {
 
-        Set-vROResourceElement -File $JSON.Resource.FileName -ResourceID $Resource.Id -Confirm:$False
+        Set-vROResourceElement -File $JSON.Resource.FileName -Id $Resource.Id -Confirm:$False
         $SetResourceElement = Get-vROResourceElement | Where-Object {$_.Name -eq $JSON.Resource.Name}
         $SetResourceElement.Name | Should Be $JSON.Resource.Name
 
