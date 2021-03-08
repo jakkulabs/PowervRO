@@ -1,6 +1,6 @@
 @{
     ExcludeRules=@(
-
+        "PSAvoidGlobalVars"
     )
 
     Severity=@(
