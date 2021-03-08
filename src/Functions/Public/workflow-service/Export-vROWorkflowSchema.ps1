@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Export a vRO Workflow Schema as a PNG file
-    
+
     .DESCRIPTION
     Export a vRO Workflow Schema as a PNG file
-    
+
     .PARAMETER Id
     Specify the ID of the vRO Workfow
 
@@ -17,7 +17,7 @@
 
     .OUTPUTS
     System.IO.FileInfo
-    
+
     .EXAMPLE
     Export-vROWorkflowSchema -Id "3f92d2dc-a9fa-4323-900b-ef97196184ea" -File C:\Schemata\Test01.png
 
@@ -30,36 +30,36 @@
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$Id,         
-    
+    [String]$Id,
+
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$File 
+    [String]$File
     )
 
     begin {
-    
+
     }
 
     process {
 
         foreach ($WorkflowId in $Id){
 
-            try {    
- 
+            try {
+
                 $URI = "/vco/api/workflows/$($WorkflowId)/schema"
 
                 $Headers = @{
 
                     "Content-Type" = "image/png";
-                    "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+                    "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
                 }
 
                 # --- Run vRO REST Request
                 Invoke-vRORestMethod -Method GET -Headers $Headers -URI $URI -OutFile $File -Verbose:$VerbosePreference
-        
+
                 # --- Output the result
-                Get-ChildItem -Path $File  
+                Get-ChildItem -Path $File
             }
             catch [Exception]{
 

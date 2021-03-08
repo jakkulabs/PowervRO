@@ -17,21 +17,21 @@
     Param ()
 
     # --- Test for existing connection to vRA
-    if (-not $Global:vROConnection){
+    if (-not $Script:vROConnection){
 
         throw "vRO Connection variable does not exist. Please run Connect-vROServer first to create it"
     }
 
-    if ($PSCmdlet.ShouldProcess($Global:vROConnection.Server)){
+    if ($PSCmdlet.ShouldProcess($Script:vROConnection.Server)){
 
         try {
 
             # --- Remove custom Security Protocol if it has been specified
-            if ($Global:vROConnection.SslProtocol -ne 'Default'){
+            if ($Script:vROConnection.SslProtocol -ne 'Default'){
 
                 if (!$IsCoreCLR) {
 
-                    [System.Net.ServicePointManager]::SecurityProtocol -= [System.Net.SecurityProtocolType]::$($Global:vROConnection.SslProtocol)
+                    [System.Net.ServicePointManager]::SecurityProtocol -= [System.Net.SecurityProtocolType]::$($Script:vROConnection.SslProtocol)
                 }
             }
         }

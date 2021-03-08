@@ -86,13 +86,13 @@
     )
 
 # --- Test for existing connection to vRO
-if (-not $Global:vROConnection){
+if (-not $Script:vROConnection){
 
     throw "vRO Connection variable does not exist. Please run Connect-vROServer first to create it"
 }
 
     # --- Create Invoke-RestMethod Parameters
-    $FullURI = "$($Global:vROConnection.Server)$($URI)"
+    $FullURI = "$($Script:vROConnection.Server)$($URI)"
 
     # --- Add default headers if not passed
     if (!$PSBoundParameters.ContainsKey("Headers")){
@@ -101,7 +101,7 @@ if (-not $Global:vROConnection){
 
             "Accept"="application/json";
             "Content-Type" = "application/json";
-            "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+            "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
         }
     }
 
@@ -127,7 +127,7 @@ if (-not $Global:vROConnection){
     }
 
     # --- Support for PowerShell Core certificate checking
-    if (!($Global:vROConnection.SignedCertificates) -and ($IsCoreCLR)) {
+    if (!($Script:vROConnection.SignedCertificates) -and ($IsCoreCLR)) {
 
         $Params.Add("SkipCertificateCheck", $true)
     }

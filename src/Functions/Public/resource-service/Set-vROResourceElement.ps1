@@ -1,10 +1,10 @@
 function Set-vROResourceElement {
 <#
     .SYNOPSIS
-    Updates a resource element based off the resource ID.    
+    Updates a resource element based off the resource ID.
 
     .DESCRIPTION
-    Updates a resource element based off the resource ID. 
+    Updates a resource element based off the resource ID.
 
     .PARAMETER Id
     The ID of the Resource
@@ -28,8 +28,8 @@ function Set-vROResourceElement {
 
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$Id,         
-    
+    [String]$Id,
+
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
     [String[]]$File
@@ -40,7 +40,7 @@ function Set-vROResourceElement {
 
         #Set Set Line Feed
         $LF = "`r`n"
-    
+
     }
 
     process {
@@ -69,8 +69,8 @@ function Set-vROResourceElement {
 
                 # --- Set custom headers for the request
                 $Headers = @{
-                
-                    "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+
+                    "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
                     "Accept" = "Application/json"
                     "Accept-Encoding" = "gzip,deflate,sdch";
                     "Content-Type" = "multipart/form-data; boundary=$($Boundary)"
@@ -80,7 +80,7 @@ function Set-vROResourceElement {
 
                     # --- Run vRO REST Request
                     Invoke-vRORestMethod -Method POST -Uri $URI -Body $Form -Headers $Headers -Verbose:$VerbosePreference | Out-Null
-                    
+
                 }
 
             }

@@ -1,10 +1,10 @@
 ﻿function Import-vROPackage {
 <#
     .SYNOPSIS
-    Imports a vRO Package    
+    Imports a vRO Package
 
     .DESCRIPTION
-    Imports a vRO Package  
+    Imports a vRO Package
 
     .PARAMETER File
     The action file
@@ -58,9 +58,9 @@
         # --- Set Set Line Feed
         $LF = "`r`n"
 
-        # --- Set options        
+        # --- Set options
         if ($PSBoundParameters.ContainsKey("Overwrite")) {
- 
+
             $OverwriteParam = 'true'
 
         }
@@ -70,7 +70,7 @@
         }
 
         if ($PSBoundParameters.ContainsKey("ImportConfigurationAttributeValues")) {
- 
+
             $ImportConfigurationAttributeValuesParam = 'true'
 
         }
@@ -79,7 +79,7 @@
             $ImportConfigurationAttributeValuesParam = 'false'
         }
 
-        switch ($TagImportMode){ 
+        switch ($TagImportMode){
 
             “Dont”  {
 
@@ -96,10 +96,10 @@
 
                 $TagImportModeParam = 'ImportButPreserveExistingValue';
                 break
-            } 
+            }
 
-        } 
-    
+        }
+
     }
 
     process {
@@ -129,8 +129,8 @@
 
                 # --- Set custom headers for the request
                 $Headers = @{
-                
-                    "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+
+                    "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
                     "Accept" = "Application/json"
                     "Accept-Encoding" = "gzip,deflate,sdch";
                     "Content-Type" = "multipart/form-data; boundary=$($Boundary)"

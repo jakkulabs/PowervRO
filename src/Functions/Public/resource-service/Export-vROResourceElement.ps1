@@ -75,7 +75,7 @@
 
                 $Headers = @{
 
-                    "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+                    "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
                     "Accept" =" application/octet-stream";
 
                 }
