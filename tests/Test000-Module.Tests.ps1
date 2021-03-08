@@ -9,10 +9,10 @@
 # --- Ensure that each function has valid help and parameter descriptions
 Describe "Function Help -> " {
 
-    $ModulePath = "$ENV:BHProjectPath\Release\PowervRA\PowervRA.psd1"
+    $ModulePath = "$ENV:BHProjectPath\Release\PowervRO\PowervRO.psd1"
     Import-Module $ModulePath -Force
 
-    $Functions = @(Get-Command -Module PowervRA -CommandType Function | ForEach-Object { @{Name = $_.Name } })
+    $Functions = @(Get-Command -Module PowervRO -CommandType Function | ForEach-Object { @{Name = $_.Name } })
 
     It "<Name> has the required help entries" -TestCases $Functions {
         Param(
@@ -41,6 +41,6 @@ Describe "Function Help -> " {
     }
 
     AfterAll {
-        Remove-Module -Name PowervRA -Force
+        Remove-Module -Name PowervRO -Force
     }
 }
