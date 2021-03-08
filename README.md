@@ -1,4 +1,4 @@
-![Build status](https://jakkulabs.visualstudio.com/_apis/public/build/definitions/b9938934-bc30-4bf9-8ee8-91138dde4db8/2/badge)
+![Process PS Module](https://github.com/jakkulabs/PowervRO/actions/workflows/ps-module.yml/badge.svg) ![](https://img.shields.io/powershellgallery/v/PowervRO) ![](https://img.shields.io/powershellgallery/dt/PowervRO)
 
 # Welcome to PowervRO
 PowervRO is a PowerShell module built on top of the services exposed by the vRealize Orchestrator REST API.
@@ -35,7 +35,7 @@ Install-Module -Name PowervRO -Scope CurrentUser
 ```
 
 ## Running Locally
-When developing, use the provided build script and import the module that is inside the Release directory. 
+When developing, use the provided build script and import the module that is inside the Release directory.
 
 You **do not** have to manually edit src\PowervRO.psd1 when adding new functions
 
