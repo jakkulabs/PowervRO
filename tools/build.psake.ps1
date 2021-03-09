@@ -7,8 +7,9 @@ properties {
 
 # --- Define the build tasks
 Task Default -depends Build
-Task Test -depends Init, Analyze, ExecuteTest
-Task Build -depends Test, UpdateModuleManifest, CreateArtifact, CreateArchive
+Task Build -depends Lint, UpdateModuleManifest, CreateArtifact, CreateArchive
+Task BuildWithTests -depends Init, Build, ExecuteTest
+
 Task Init {
 
     Write-Output "Build System Details:"
@@ -18,11 +19,7 @@ Task Init {
     Write-Output "ScriptAnalyzerSeverityLevel: $($ScriptAnalysisFailBuildOnSeverityLevel)"
 }
 
-##############
-# Task: Test #
-##############
-
-Task Analyze {
+Task Lint {
 
     $Results = Invoke-ScriptAnalyzer -Path $ENV:BHModulePath -Recurse -Settings $ScriptAnalyzerSettingsPath -Verbose:$VerbosePreference
     $Results | Select-Object RuleName, Severity, ScriptName, Line, Message | Format-List
@@ -59,40 +56,16 @@ Task Analyze {
 
 }
 
-Task ExecuteTest {
-
-    # --- Run Tests. Currently limited to help tests
-    $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
-    $TestFile = "TEST_PS$PSVersion`_$TimeStamp.xml"
-    $Parameters = @{
-        Script = "$ENV:BHProjectPath\test\Test000-Module.Tests.ps1"
-        PassThru = $true
-        OutputFormat = 'NUnitXml'
-        OutputFile = "$ENV:BHProjectPath\$TestFile"
-    }
-
-    Push-Location
-    Set-Location -Path $ENV:BHProjectPath
-    $TestResults = Invoke-Pester @Parameters
-    Pop-Location
-
-    if ($TestResults.FailedCount -gt 0) {
-        Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
-    }
-}
-
-###############
-# Task: Build #
-###############
-
 Task UpdateModuleManifest {
 
     $PublicFunctions = Get-ChildItem -Path "$($ENV:BHModulePath)\Functions\Public" -Filter "*.ps1" -Recurse | Sort-Object
 
+    Write-Output "PublicFunctions are: $PublicFunctions"
+
     $ExportFunctions = @()
 
     foreach ($FunctionFile in $PublicFunctions) {
-        $AST = [System.Management.Automation.Language.Parser]::ParseFile($FunctionFile.FullName, [ref]$null, [ref]$null)        
+        $AST = [System.Management.Automation.Language.Parser]::ParseFile($FunctionFile.FullName, [ref]$null, [ref]$null)
         $Functions = $AST.FindAll({
             # --- Only export functions that contain a "-" and do not start with "int"
             $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst] -and `
@@ -101,16 +74,12 @@ Task UpdateModuleManifest {
         },$true)
         if ($Functions.Name) {
             $ExportFunctions += $Functions.Name
-        }        
+        }
     }
 
     Set-ModuleFunctions -Name $ENV:BHPSModuleManifest -FunctionsToExport $ExportFunctions -Verbose:$VerbosePreference
 
 }
-
-#################
-# Task: Release #
-#################
 
 Task CreateArtifact {
 
@@ -128,16 +97,9 @@ Task CreateArtifact {
     $ModuleManifestSource = Get-Item -Path $ENV:BHPSModuleManifest
     Copy-Item -Path $ModuleManifestSource.FullName -Destination "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -Force
 
-    # --- Copy accross RELEASE.md
-    Write-Output "Copyying RELEASE.md"
-    $ReleaseNotes = Get-Item -Path "$($ENV:BHProjectPath)\RELEASE.md"
-    Copy-Item -Path $ReleaseNotes.FullName -Destination "$($ENV:BHProjectPath)\Release\RELEASE.md" -Force
-
     # --- Set the psd1 module version
-    if ($ENV:TF_BUILD){
-        $ModuleManifestVersion = $ENV:BUILD_BUILDNUMBER.Split("-")[0]
-    }
-    Update-Metadata -Path "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -PropertyName ModuleVersion -Value $ModuleManifestVersion        
+    $ModuleManifestVersion = $ENV:GITVERSION_MajorMinorPatch
+    Update-Metadata -Path "$($ReleaseDirectoryPath)\$($ModuleName).psd1" -PropertyName ModuleVersion -Value $ModuleManifestVersion
 
     # --- Create an empty psm1 file
     Write-Output "Creating base PSM1 file"
@@ -171,11 +133,7 @@ $($Content)
 
 Task CreateArchive {
 
-    $Destination = "$($ReleaseDirectoryPath).zip"    
-    
-    if ($ENV:TF_BUILD){
-        $Destination = "$($ReleaseDirectoryPath).$($ENV:BUILD_BUILDNUMBER).zip"
-    }
+    $Destination = "$($ReleaseDirectoryPath).$($ENV:GITVERSION_SemVer).zip"
 
     if (Test-Path -Path $Destination) {
         Remove-Item -Path $Destination -Force
@@ -185,8 +143,20 @@ Task CreateArchive {
     [IO.Compression.ZipFile]::CreateFromDirectory($ReleaseDirectoryPath, $Destination)
 }
 
+Task ExecuteTest {
+
+    $config = [PesterConfiguration]::Default
+    $config.CodeCoverage.Enabled = $true
+    $config.TestResult.Enabled = $true
+    $config.TestResult.OutputFormat = 'JUnitXml'
+    $config.Output.Verbosity = 'Detailed'
+    $config.Run.Path = "$ENV:BHProjectPath\tests\Test000-Module.Tests.ps1"
+    $config.Run.Exit = $true
+    Invoke-Pester -Configuration $config
+}
+
 Task UpdateDocumentation {
-    
+
     Write-Output "Updating Markdown help"
     $ModuleInfo = Import-Module $ENV:BHPSModuleManifest -Global -Force -PassThru
     $FunctionsPath = "$DocsDirectory\functions"
@@ -225,7 +195,7 @@ pages:
 - 'Change log' : 'CHANGELOG.md'
 - 'Functions': $($Functions -join "`r")
 "@
-    
+
     $Template | Set-Content -Path $Mkdocs -Force
-    
+
 }

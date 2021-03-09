@@ -49,7 +49,7 @@
             "type": "number",
             "name": "b",
             "scope": "local"
-        }	
+        }
 	]
 }
 "@
@@ -65,8 +65,8 @@
 [CmdletBinding(DefaultParametersetName="A")][OutputType('System.Management.Automation.PSObject')]
 
     Param
-    (   
-    
+    (
+
         [Parameter(Mandatory=$true,ValueFromPipelinebyPropertyName=$true,ParameterSetName="A")]
         [parameter(Mandatory=$true,ParameterSetName="B")]
         [ValidateNotNullOrEmpty()]
@@ -92,13 +92,17 @@
         [PSCustomObject[]]$Parameters
     )
 
-    try {
+    begin {}
 
-        if ($PSBoundParameters.ContainsKey('ParameterType')){
+    process {
 
-            $ParameterType = $ParameterType.ToLower()
+        try {
 
-            $Body = @"
+            if ($PSBoundParameters.ContainsKey('ParameterType')){
+
+                $ParameterType = $ParameterType.ToLower()
+
+                $Body = @"
 {"parameters":
 	[
         {
@@ -106,66 +110,67 @@
             "type": "$($ParameterType)",
             "name": "$($ParameterName)",
             "scope": "local"
-        }	
+        }
 	]
 }
 "@
-        }
-
-        elseif ($PSBoundParameters.ContainsKey('Parameters')){
-
-            $Object = [PSCustomObject]@{
-
-                parameters = @()
-
             }
 
-            foreach ($Parameter in $Parameters) {
+            elseif ($PSBoundParameters.ContainsKey('Parameters')){
 
-                $Object.parameters += $Parameter
-                    
+                $Object = [PSCustomObject]@{
+
+                    parameters = @()
+
+                }
+
+                foreach ($Parameter in $Parameters) {
+
+                    $Object.parameters += $Parameter
+
+                }
+
+                $Body = $Object | ConvertTo-Json -Depth 100
             }
 
-            $Body = $Object | ConvertTo-Json -Depth 100
-        }
+            else {
 
-        else { 
-          
-            $Body = @"
+                $Body = @"
 {"parameters":
 	[
-	
+
 	]
 }
-"@                  
-        }
+"@
+            }
 
-        $URI = "/vco/api/workflows/$($Id)/executions/"
+            $URI = "/vco/api/workflows/$($Id)/executions/"
 
-        $InvokeRequest = Invoke-vRORestMethod -Method POST -URI $URI -Body $Body -WebRequest -Verbose:$VerbosePreference
+            $InvokeRequest = Invoke-vRORestMethod -Method POST -URI $URI -Body $Body -WebRequest -Verbose:$VerbosePreference
 
-        # --- System.Uri gives different output type in Windows PS vs PS Core
-        if ($IsCoreCLR) {
+            # --- System.Uri gives different output type in Windows PS vs PS Core
+            if ($IsCoreCLR) {
 
-            [pscustomobject]@{
-                        
-                StatusCode = $InvokeRequest.StatusCode
-                StatusDescription = $InvokeRequest.StatusDescription
-                Execution = ([System.Uri]$InvokeRequest.Headers.Location[0]).LocalPath
+                [pscustomobject]@{
+
+                    StatusCode = $InvokeRequest.StatusCode
+                    StatusDescription = $InvokeRequest.StatusDescription
+                    Execution = ([System.Uri]$InvokeRequest.Headers.Location[0]).LocalPath
+                }
+            }
+            else {
+
+                [pscustomobject]@{
+
+                    StatusCode = $InvokeRequest.StatusCode
+                    StatusDescription = $InvokeRequest.StatusDescription
+                    Execution = ([System.Uri]$InvokeRequest.Headers.Location).LocalPath
+                }
             }
         }
-        else {
-            
-            [pscustomobject]@{
+        catch [Exception]{
 
-                StatusCode = $InvokeRequest.StatusCode
-                StatusDescription = $InvokeRequest.StatusDescription
-                Execution = ([System.Uri]$InvokeRequest.Headers.Location).LocalPath
-            }
+            throw
         }
-    }
-    catch [Exception]{
-        
-        throw
     }
 }

@@ -1,9 +1,8 @@
 @{
     ExcludeRules=@(
-        "PSAvoidUsingUserNameAndPassWordParams",
         "PSAvoidGlobalVars"
     )
-    
+
     Severity=@(
         "Warning",
         "Error"
@@ -17,5 +16,4 @@
             "core-6.0.0-alpha-osx"
         )}
     }
-
 }
