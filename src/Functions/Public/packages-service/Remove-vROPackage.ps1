@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Remove a vRO Package
-    
+
     .DESCRIPTION
     Remove a vRO Package
-    
+
     .PARAMETER Name
     Package Name
 
@@ -30,6 +30,8 @@
 #>
 [CmdletBinding(DefaultParametersetName="DeletePackage",SupportsShouldProcess,ConfirmImpact="High")]
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
+
     Param (
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
@@ -41,19 +43,19 @@
 
     [parameter(Mandatory=$false,ParametersetName="DeletePackageKeepingShared")]
     [Switch]$DeletePackageKeepingShared
-    )    
+    )
 
     begin {
-    
+
     }
-    
-    process {    
+
+    process {
 
         foreach ($PackageName in $Name){
 
-            try {    
-                
-                switch ($PsCmdlet.ParameterSetName){ 
+            try {
+
+                switch ($PsCmdlet.ParameterSetName){
 
                     “DeletePackage”  {
 
@@ -70,9 +72,9 @@
 
                         $URI = "/vco/api/packages/$($PackageName)/?option=deletePackageKeepingShared";
                         break
-                    } 
+                    }
 
-                } 
+                }
 
                 if ($PSCmdlet.ShouldProcess($PackageName)){
 
@@ -87,6 +89,6 @@
         }
     }
     end {
-        
+
     }
 }
