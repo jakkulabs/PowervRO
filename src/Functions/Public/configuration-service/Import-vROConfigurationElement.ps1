@@ -1,7 +1,7 @@
 ﻿function Import-vROConfigurationElement {
 <#
     .SYNOPSIS
-    Imports a configuration element in a given category.    
+    Imports a configuration element in a given category.
 
     .DESCRIPTION
     Imports a configuration element in a given category.
@@ -29,8 +29,8 @@
 
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$CategoryId,         
-    
+    [String]$CategoryId,
+
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
     [String[]]$File
@@ -41,7 +41,7 @@
 
         #Set Set Line Feed
         $LF = "`r`n"
-    
+
     }
 
     process {
@@ -70,8 +70,8 @@
 
                 # --- Set custom headers for the request
                 $Headers = @{
-                
-                    "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+
+                    "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
                     "Accept" = "Application/json"
                     "Accept-Encoding" = "gzip,deflate,sdch";
                     "Content-Type" = "multipart/form-data; boundary=$($Boundary)"
@@ -81,7 +81,7 @@
 
                     # --- Run vRO REST Request
                     Invoke-vRORestMethod -Method POST -Uri $URI -Body $Form -Headers $Headers -Verbose:$VerbosePreference | Out-Null
-                    
+
                 }
 
             }

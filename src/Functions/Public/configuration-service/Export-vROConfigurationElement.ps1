@@ -1,11 +1,11 @@
 ﻿function Export-vROConfigurationElement {
 <#
     .SYNOPSIS
-    Exports a configuration element by its ID. 
-    
+    Exports a configuration element by its ID.
+
     .DESCRIPTION
-    Exports a configuration element by its ID. 
-    
+    Exports a configuration element by its ID.
+
     .PARAMETER Id
     The id of the action
 
@@ -32,8 +32,8 @@
 
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$Id,         
-    
+    [String]$Id,
+
     [parameter(Mandatory=$false)]
     [ValidateNotNullOrEmpty()]
     [String]$Path
@@ -41,30 +41,30 @@
     )
 
     begin {
-    
+
     }
 
     process {
 
         foreach ($ConfigurationId in $Id){
 
-            try {    
- 
+            try {
+
                 $URI = "/vco/api/configurations/$($ConfigurationId)"
 
                 $Headers = @{
-                
-                    "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+
+                    "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
                     "Accept" ="application/vcoobject+xml";
                     "Accept-Encoding" = "gzip, deflate";
                     "Content-Type" = "Application/vcoobject+xml;charset=utf-8";
-                    
+
                 }
 
                 # --- Run vRO REST Request
                 $Request = Invoke-vRORestMethod -Uri $URI -Method Get -Headers $Headers -WebRequest -Verbose:$VerbosePreference
 
-                # --- Get the displayname of the Configuration element and set filename                
+                # --- Get the displayname of the Configuration element and set filename
                 $XMLContent = [XML]$Request.Content
                 $DisplayName = $XMLContent.'config-element'.'display-name'.'#cdata-section'
                 $FileName = "$($DisplayName).vsoconf"
@@ -78,7 +78,7 @@
                 else {
 
                     Write-Verbose -Message "Path parameter passed."
-                    
+
                     if ($Path.EndsWith("\")) {
 
                         Write-Verbose -Message "Ends with"
@@ -86,16 +86,16 @@
                         $Path = $Path.TrimEnd("\")
 
                     }
-                    
+
                     $FullPath = "$($Path)\$($FileName)"
 
                 }
 
                 Write-Verbose -Message "Exporting configuration element to $($FullPath)"
-                $Request.Content | Set-Content -Path $FullPath -Force        
+                $Request.Content | Set-Content -Path $FullPath -Force
 
                 # --- Output the result
-                Get-ChildItem -Path $FullPath 
+                Get-ChildItem -Path $FullPath
 
             }
             catch [Exception]{

@@ -1,7 +1,7 @@
 ﻿function Import-vROPlugin {
 <#
     .SYNOPSIS
-    Imports a resource element in a given category.    
+    Imports a resource element in a given category.
 
     .DESCRIPTION
     Imports a resource element in a given category.
@@ -29,8 +29,8 @@
 #>
 [CmdletBinding(SupportsShouldProcess,ConfirmImpact="High")]
 
-    Param (     
-    
+    Param (
+
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
     [System.IO.FileInfo]$File,
@@ -40,7 +40,7 @@
     [String]$Format,
 
     [parameter(Mandatory=$false)]
-    [Switch]$Overwrite    
+    [Switch]$Overwrite
 
     )
 
@@ -48,7 +48,7 @@
 
         #Set Set Line Feed
         $LF = "`r`n"
-    
+
     }
 
     process {
@@ -75,8 +75,8 @@
 
             # --- Set custom headers for the request
             $Headers = @{
-            
-                "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+
+                "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
                 "Accept" = "Application/json"
                 "Accept-Encoding" = "gzip,deflate,sdch";
                 "Content-Type" = "multipart/form-data; boundary=$($Boundary)"
@@ -86,7 +86,7 @@
 
                 # --- Run vRO REST Request
                 Invoke-vRORestMethod -Method POST -Uri $URI -Body $Form -Headers $Headers -Verbose:$VerbosePreference | Out-Null
-                
+
             }
 
         }

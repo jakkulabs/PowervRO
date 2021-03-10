@@ -2,10 +2,10 @@
 <#
     .SYNOPSIS
     Import a vRO Workflow from a .workflow file
-    
+
     .DESCRIPTION
     Import a vRO Workflow from a .workflow file
-    
+
     .PARAMETER CategoryId
     Specify the ID of the vRO Category to import the Workfow to
 
@@ -28,7 +28,7 @@
 
     .NOTES
     Thanks to @burkeazbill for a few hints with this one https://github.com/burkeazbill/vroClientScripts
-    
+
     .EXAMPLE
     Import-vROWorkflow -CategoryId "40281e8654ddec6201553af63677146e" -File C:\Workflows\Test01.workflow -Overwrite
 
@@ -45,8 +45,8 @@
     [parameter(Mandatory=$true)]
     [Alias("Id")]
     [ValidateNotNullOrEmpty()]
-    [String]$CategoryId,         
-    
+    [String]$CategoryId,
+
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
     [String[]]$File,
@@ -59,7 +59,7 @@
     )
 
     begin {
- 
+
         # --- Set Set Line Feed
         $LF = "`r`n"
     }
@@ -86,9 +86,9 @@
                     $EncodedFile,
                     "--$($Boundary)--$($LF)"
                 ) -join $LF
-                       
+
                 if ($PSBoundParameters.ContainsKey("Overwrite")) {
- 
+
                     $URI = "/vco/api/workflows?categoryId=$($categoryId)&overwrite=true"
                 }
                 else {
@@ -97,8 +97,8 @@
                 }
 
                 $Headers = @{
-                
-                    "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+
+                    "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
                     "Accept" = "Application/json"
                     "Accept-Encoding" = "gzip,deflate,sdch";
                     "Content-Type" = "multipart/form-data; boundary=$($Boundary)"
@@ -108,9 +108,9 @@
 
                     # --- Run vRO REST Request
                     Invoke-vRORestMethod -Method POST -Uri $URI -Body $Form -Headers $Headers -Verbose:$VerbosePreference
-                    
+
                     if ($PSBoundParameters.ContainsKey("PassThru")) {
-                       
+
                         # --- Output the result
                         $WorkflowName = ($FileInfo.Name -split "\.")[0]
                         Get-vROWorkflow -Name $WorkflowName

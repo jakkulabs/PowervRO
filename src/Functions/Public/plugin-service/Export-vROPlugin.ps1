@@ -62,7 +62,7 @@
 
                 $Headers = @{
 
-                    "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+                    "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
                     "Accept" ="Application/json";
                     "Content-Type" = "application/zip;charset=UTF-8";
 

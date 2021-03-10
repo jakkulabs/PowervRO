@@ -1,7 +1,7 @@
 ﻿function Import-vROAction {
 <#
     .SYNOPSIS
-    Imports an action in a given category.    
+    Imports an action in a given category.
 
     .DESCRIPTION
     Imports an action in a given category.
@@ -35,8 +35,8 @@
 
     [parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [String]$CategoryName,         
-    
+    [String]$CategoryName,
+
     [parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelinebyPropertyName=$true)]
     [ValidateNotNullOrEmpty()]
     [String[]]$File,
@@ -50,7 +50,7 @@
 
         #Set Set Line Feed
         $LF = "`r`n"
-    
+
     }
 
     process {
@@ -75,9 +75,9 @@
                     $EncodedFile,
                     "--$($Boundary)--$($LF)"
                 ) -join $LF
-                       
+
                 if ($PSBoundParameters.ContainsKey("Overwrite")) {
- 
+
                     $URI = "/vco/api/actions?categoryName=$($CategoryName)&overwrite=true"
 
                 }
@@ -89,8 +89,8 @@
 
                 # --- Set custom headers for the request
                 $Headers = @{
-                
-                    "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+
+                    "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
                     "Accept" = "Application/json"
                     "Accept-Encoding" = "gzip,deflate,sdch";
                     "Content-Type" = "multipart/form-data; boundary=$($Boundary)"
@@ -100,7 +100,7 @@
 
                     # --- Run vRO REST Request
                     Invoke-vRORestMethod -Method POST -Uri $URI -Body $Form -Headers $Headers -Verbose:$VerbosePreference | Out-Null
-                    
+
                 }
 
             }

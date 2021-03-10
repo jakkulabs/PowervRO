@@ -180,7 +180,7 @@
         $EncodedPassword = [System.Convert]::ToBase64String($Encoded)
 
         # --- Create Output Object
-        $Global:vROConnection = [pscustomobject]@{
+        $Script:vROConnection = [pscustomobject]@{
 
             Server = "https://$($Server):$($Port)"
             Username = $Username
@@ -193,15 +193,15 @@
 
         # --- Update vROConnection with version information
         $VersionInfo = Get-vROVersion
-        $Global:vROConnection.Version = $VersionInfo.Version
-        $Global:vROConnection.APIVersion = $VersionInfo.APIVersion
+        $Script:vROConnection.Version = $VersionInfo.Version
+        $Script:vROConnection.APIVersion = $VersionInfo.APIVersion
 
         # --- Test the credentials provided
         Write-Verbose -Message "Testing credentials"
         $URI = "/vco/api/server/permissions"
         Invoke-vRORestMethod -Method Get -URI $URI -ErrorAction Stop | Out-Null
 
-        Write-Output $Global:vROConnection
+        Write-Output $Script:vROConnection
     }
     catch [Exception]{
 

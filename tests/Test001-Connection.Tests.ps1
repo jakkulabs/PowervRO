@@ -16,7 +16,7 @@ Describe -Name 'Connectivity Tests' -Fixture {
 
         $ConnectionPassword = ConvertTo-SecureString $JSON.Connection.Password -AsPlainText -Force
         Connect-vROServer -Server $JSON.Connection.vROServer -Username $JSON.Connection.Username -Password $ConnectionPassword -IgnoreCertRequirements
-        $($Global:vROConnection.Version) | Should Be $true
+        $($Script:vROConnection.Version) | Should Be $true
     }
 }
 
@@ -25,6 +25,6 @@ Describe -Name 'Disconnectivity Tests' -Fixture {
     It -Name 'Disconnects from a vRO Server' -Test {
 
         Disconnect-vROServer -Confirm:$false
-        $($Global:vROConnection.Token) | Should Be $null
+        $($Script:vROConnection.Token) | Should Be $null
     }
 }

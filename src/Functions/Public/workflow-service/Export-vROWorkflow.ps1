@@ -44,7 +44,7 @@
 
         $Headers = @{
 
-            "Authorization" = "Basic $($Global:vROConnection.EncodedPassword)";
+            "Authorization" = "Basic $($Script:vROConnection.EncodedPassword)";
             "Accept" ="Application/zip";
             "Accept-Encoding" = "gzip, deflate";
             "Content-Type" = "Application/zip;charset=utf-8";
