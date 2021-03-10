@@ -171,7 +171,7 @@
     
                     foreach ($Workflow in $Workflows.link){
     
-                        [pscustomobject]@{
+                        $returnObject = @{
     
                             Name = ($Workflow.attributes | Where-Object {$_.name -eq 'name'}).value
                             ID = ($Workflow.attributes | Where-Object {$_.name -eq 'id'}).value
@@ -184,6 +184,16 @@
                             CanExecute = ($Workflow.attributes | Where-Object {$_.name -eq 'canExecute'}).value
                             CanEdit = ($Workflow.attributes | Where-Object {$_.name -eq 'canEdit'}).value
                         }
+
+                        # add tags if appropriate
+                        $tags = $Workflow.attributes | Where-Object {$_.name -eq 'globalTags'} | Select-Object -ExpandProperty 'value'
+                        if ($tags) {
+
+                            $tagsArray = ($tags -replace ':__SYSTEM_TAG__|.$', '').Split(' ')
+                            $returnObject.Add('Tags', $tagsArray)
+                        }
+
+                        [PSCustomObject]$returnObject
                     }
                 }
     
@@ -193,7 +203,7 @@
     
                     foreach ($Workflow in $Workflows.link){
     
-                        [pscustomobject]@{
+                        $returnObject = @{
     
                             Name = ($Workflow.attributes | Where-Object {$_.name -eq 'name'}).value
                             ID = ($Workflow.attributes | Where-Object {$_.name -eq 'id'}).value
@@ -206,6 +216,16 @@
                             CanExecute = ($Workflow.attributes | Where-Object {$_.name -eq 'canExecute'}).value
                             CanEdit = ($Workflow.attributes | Where-Object {$_.name -eq 'canEdit'}).value
                         }
+
+                        # add tags if appropriate
+                        $tags = $Workflow.attributes | Where-Object {$_.name -eq 'globalTags'} | Select-Object -ExpandProperty 'value'
+                        if ($tags) {
+
+                            $tagsArray = ($tags -replace ':__SYSTEM_TAG__|.$', '').Split(' ')
+                            $returnObject.Add('Tags', $tagsArray)
+                        }
+
+                        [PSCustomObject]$returnObject
                     }
                 }
             }
