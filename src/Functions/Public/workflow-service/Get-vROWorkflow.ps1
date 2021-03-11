@@ -48,6 +48,9 @@
 
     .EXAMPLE
     Get-vROWorkflow -Name 'New' -Wildcard
+
+    .EXAMPLE
+    Get-vROWorkflow -Tag 'vCenter'
 #>
 [CmdletBinding(DefaultParametersetName="All")][OutputType('System.Management.Automation.PSObject')]
 
