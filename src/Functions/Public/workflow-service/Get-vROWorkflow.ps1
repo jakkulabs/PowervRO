@@ -21,6 +21,9 @@
     .PARAMETER Wildcard
     Perform a wildcard search when using the Name parameter
 
+    .PARAMETER Tag
+    Retrieve workflow by Tag
+
     .INPUTS
     System.String
     System.Switch
@@ -45,6 +48,9 @@
 
     .EXAMPLE
     Get-vROWorkflow -Name 'New' -Wildcard
+
+    .EXAMPLE
+    Get-vROWorkflow -Tag 'vCenter'
 #>
 [CmdletBinding(DefaultParametersetName="All")][OutputType('System.Management.Automation.PSObject')]
 
@@ -65,122 +71,171 @@
     [String]$Name,
 
     [parameter(Mandatory=$false,ParameterSetName="Name")]
-    [Switch]$Wildcard
+    [Switch]$Wildcard,
+
+    [parameter(Mandatory=$false,ParameterSetName="All")]
+    [parameter(Mandatory=$false,ParameterSetName="CategoryName")]
+    [parameter(Mandatory=$false,ParameterSetName="Category")]
+    [String[]]$Tag
 
     )
 
-    try {
+    begin {
 
-        # --- Send REST call and process results
-        switch ($PsCmdlet.ParameterSetName){
+        # --- Verify vRO version supports tagging
+        if ($PSBoundParameters.ContainsKey('Tag') -and $Script:vROConnection.Version -like '7.*') {
 
-            "All" {
-
-                $URI = "/vco/api/workflows"
-                break
-            }
-
-            "CategoryName" {
-
-                $URI = "/vco/api/workflows/?conditions=categoryName=$($CategoryName)"
-                break
-            }
-
-            "CategoryId" {
-
-                $URI = "/vco/api/catalog/System/WorkflowCategory/$($CategoryId)/workflows"
-                break
-            }
-
-            "Id" {
-
-                $URI = "/vco/api/workflows/$($Id)"
-                break
-
-            }
-
-            "Name" {
-
-                if ($PSBoundParameters.ContainsKey('Wildcard')){
-
-                    $URI = "/vco/api/workflows/?conditions=name~$($Name)"
-                }
-                else {
-
-                    $URI = "/vco/api/workflows/?conditions=name=$($Name)"
-                }
-                break
-            }
-        }
-
-        switch ($PsCmdlet.ParameterSetName){
-
-            "Id" {
-
-                $Workflow = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
-
-                [pscustomobject]@{
-
-                    Name = $Workflow.name
-                    ID = $Workflow.id
-                    Description = $Workflow.description
-                    ItemHref = $Workflow.href
-                    Version = $Workflow.version
-                    CategoryName = $null
-                    CategoryHref = $null
-                    CustomIcon = $Workflow.'customized-icon'
-                    CanExecute = $null
-                    CanEdit = $null
-                }
-            }
-
-            "CategoryId" {
-
-                $Workflows = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
-
-                foreach ($Workflow in $Workflows.link){
-
-                    [pscustomobject]@{
-
-                        Name = ($Workflow.attributes | Where-Object {$_.name -eq 'name'}).value
-                        ID = ($Workflow.attributes | Where-Object {$_.name -eq 'id'}).value
-                        Description = ($Workflow.attributes | Where-Object {$_.name -eq 'description'}).value
-                        ItemHref = $Workflow.href
-                        Version = ($Workflow.attributes | Where-Object {$_.name -eq 'version'}).value
-                        CategoryName = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryName'}).value
-                        CategoryHref = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryHref'}).value
-                        CustomIcon = ($Workflow.attributes | Where-Object {$_.name -eq 'customIcon'}).value
-                        CanExecute = ($Workflow.attributes | Where-Object {$_.name -eq 'canExecute'}).value
-                        CanEdit = ($Workflow.attributes | Where-Object {$_.name -eq 'canEdit'}).value
-                    }
-                }
-            }
-
-            default {
-
-                $Workflows = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
-
-                foreach ($Workflow in $Workflows.link){
-
-                    [pscustomobject]@{
-
-                        Name = ($Workflow.attributes | Where-Object {$_.name -eq 'name'}).value
-                        ID = ($Workflow.attributes | Where-Object {$_.name -eq 'id'}).value
-                        Description = ($Workflow.attributes | Where-Object {$_.name -eq 'description'}).value
-                        ItemHref = ($Workflow.attributes | Where-Object {$_.name -eq 'itemHref'}).value
-                        Version = ($Workflow.attributes | Where-Object {$_.name -eq 'version'}).value
-                        CategoryName = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryName'}).value
-                        CategoryHref = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryHref'}).value
-                        CustomIcon = ($Workflow.attributes | Where-Object {$_.name -eq 'customIcon'}).value
-                        CanExecute = ($Workflow.attributes | Where-Object {$_.name -eq 'canExecute'}).value
-                        CanEdit = ($Workflow.attributes | Where-Object {$_.name -eq 'canEdit'}).value
-                    }
-                }
-            }
+            throw "Tagging is not supported with vRO $($Script:vroConnection.Version)."
         }
     }
-    catch [Exception]{
 
-        throw
+    process {
+
+        try {
+
+            # --- Send REST call and process results
+            switch ($PsCmdlet.ParameterSetName){
+    
+                "All" {
+    
+                    $URI = "/vco/api/workflows"
+                    break
+                }
+    
+                "CategoryName" {
+    
+                    $URI = "/vco/api/workflows/?conditions=categoryName=$($CategoryName)"
+                    break
+                }
+    
+                "CategoryId" {
+    
+                    $URI = "/vco/api/catalog/System/WorkflowCategory/$($CategoryId)/workflows"
+                    break
+                }
+    
+                "Id" {
+    
+                    $URI = "/vco/api/workflows/$($Id)"
+                    break
+    
+                }
+    
+                "Name" {
+    
+                    if ($PSBoundParameters.ContainsKey('Wildcard')){
+    
+                        $URI = "/vco/api/workflows/?conditions=name~$($Name)"
+                    }
+                    else {
+    
+                        $URI = "/vco/api/workflows/?conditions=name=$($Name)"
+                    }
+                    break
+                }
+            }
+
+            # filter by tag
+            if ($PSBoundParameters.ContainsKey('Tag')) {
+                $URI += if ($PSCmdlet.ParameterSetName -eq 'All') { '?' } else { '&' }
+    
+                $newParams = @()
+                foreach ($tagAttr in $Tag) {
+                    $newParams += "tags=$($tagAttr)"
+                }
+    
+                $URI += $newParams -join '&'
+            }
+    
+            switch ($PsCmdlet.ParameterSetName){
+    
+                "Id" {
+    
+                    $Workflow = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
+    
+                    [pscustomobject]@{
+    
+                        Name = $Workflow.name
+                        ID = $Workflow.id
+                        Description = $Workflow.description
+                        ItemHref = $Workflow.href
+                        Version = $Workflow.version
+                        CategoryName = $null
+                        CategoryHref = $null
+                        CustomIcon = $Workflow.'customized-icon'
+                        CanExecute = $null
+                        CanEdit = $null
+                    }
+                }
+    
+                "CategoryId" {
+    
+                    $Workflows = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
+    
+                    foreach ($Workflow in $Workflows.link){
+    
+                        $returnObject = @{
+    
+                            Name = ($Workflow.attributes | Where-Object {$_.name -eq 'name'}).value
+                            ID = ($Workflow.attributes | Where-Object {$_.name -eq 'id'}).value
+                            Description = ($Workflow.attributes | Where-Object {$_.name -eq 'description'}).value
+                            ItemHref = $Workflow.href
+                            Version = ($Workflow.attributes | Where-Object {$_.name -eq 'version'}).value
+                            CategoryName = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryName'}).value
+                            CategoryHref = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryHref'}).value
+                            CustomIcon = ($Workflow.attributes | Where-Object {$_.name -eq 'customIcon'}).value
+                            CanExecute = ($Workflow.attributes | Where-Object {$_.name -eq 'canExecute'}).value
+                            CanEdit = ($Workflow.attributes | Where-Object {$_.name -eq 'canEdit'}).value
+                        }
+
+                        # add tags if appropriate
+                        $tags = $Workflow.attributes | Where-Object {$_.name -eq 'globalTags'} | Select-Object -ExpandProperty 'value'
+                        if ($tags) {
+
+                            $tagsArray = ($tags -replace ':__SYSTEM_TAG__|.$', '').Split(' ')
+                            $returnObject.Add('Tags', $tagsArray)
+                        }
+
+                        [PSCustomObject]$returnObject
+                    }
+                }
+    
+                default {
+    
+                    $Workflows = Invoke-vRORestMethod -Method Get -Uri $URI -Verbose:$VerbosePreference
+    
+                    foreach ($Workflow in $Workflows.link){
+    
+                        $returnObject = @{
+    
+                            Name = ($Workflow.attributes | Where-Object {$_.name -eq 'name'}).value
+                            ID = ($Workflow.attributes | Where-Object {$_.name -eq 'id'}).value
+                            Description = ($Workflow.attributes | Where-Object {$_.name -eq 'description'}).value
+                            ItemHref = ($Workflow.attributes | Where-Object {$_.name -eq 'itemHref'}).value
+                            Version = ($Workflow.attributes | Where-Object {$_.name -eq 'version'}).value
+                            CategoryName = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryName'}).value
+                            CategoryHref = ($Workflow.attributes | Where-Object {$_.name -eq 'categoryHref'}).value
+                            CustomIcon = ($Workflow.attributes | Where-Object {$_.name -eq 'customIcon'}).value
+                            CanExecute = ($Workflow.attributes | Where-Object {$_.name -eq 'canExecute'}).value
+                            CanEdit = ($Workflow.attributes | Where-Object {$_.name -eq 'canEdit'}).value
+                        }
+
+                        # add tags if appropriate
+                        $tags = $Workflow.attributes | Where-Object {$_.name -eq 'globalTags'} | Select-Object -ExpandProperty 'value'
+                        if ($tags) {
+
+                            $tagsArray = ($tags -replace ':__SYSTEM_TAG__|.$', '').Split(' ')
+                            $returnObject.Add('Tags', $tagsArray)
+                        }
+
+                        [PSCustomObject]$returnObject
+                    }
+                }
+            }
+        }
+        catch [Exception]{
+    
+            throw
+        }
     }
 }
