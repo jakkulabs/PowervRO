@@ -205,7 +205,7 @@
     }
     catch [Exception]{
 
-        Remove-Variable -Name vROConnection -Scope Global -Force -ErrorAction SilentlyContinue
+        Remove-Variable -Name vROConnection -Scope Script -Force -ErrorAction SilentlyContinue
         $PSCmdlet.ThrowTerminatingError($PSitem)
     }
 }
