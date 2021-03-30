@@ -8,7 +8,7 @@ properties {
 # --- Define the build tasks
 Task Default -depends Build
 Task Build -depends Lint, UpdateModuleManifest, CreateArtifact, CreateArchive
-Task BuildWithTests -depends Init, Build, ExecuteTest
+Task BuildWithTests -depends Init, Build, ExecuteTest, UpdateDocumentation
 
 Task Init {
 
@@ -155,47 +155,25 @@ Task ExecuteTest {
     Invoke-Pester -Configuration $config
 }
 
-# Task UpdateDocumentation {
+Task UpdateDocumentation {
 
-#     Write-Output "Updating Markdown help"
-#     $ModuleInfo = Import-Module $ENV:BHPSModuleManifest -Global -Force -PassThru
-#     $FunctionsPath = "$DocsDirectory\functions"
+    Write-Output "Updating Markdown help"
+    $FunctionsPath = "$DocsDirectory\functions"
 
-#     Remove-Item -Path $FunctionsPath -Recurse -Force -ErrorAction SilentlyContinue
-#     New-Item $FunctionsPath -ItemType Directory | Out-Null
+    Remove-Item -Path $FunctionsPath -Recurse -Force -ErrorAction SilentlyContinue
+    New-Item $FunctionsPath -ItemType Directory | Out-Null
 
-#     $PlatyPSParameters = @{
-#         Module = $ModuleName
-#         OutputFolder = $FunctionsPath
-#         NoMetadata = $true
-#     }
+    Import-Module -Name "$($ReleaseDirectoryPath)" -Global
 
-#     New-MarkdownHelp @PlatyPSParameters -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
+    $PlatyPSParameters = @{
+        Module = $ModuleName
+        OutputFolder = $FunctionsPath
+        NoMetadata = $true
+    }
 
-#     # --- Ensure that index.md is present and up to date
-#     Write-Output "Updating index.md"
-#     Copy-Item -Path "$ENV:BHProjectPath\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
+    New-MarkdownHelp @PlatyPSParameters -ErrorAction SilentlyContinue -Verbose:$VerbosePreference | Out-Null
 
-#     # --- Update mkdocs.yml with new functions
-#     Write-Output "Updating mkdocs.yml"
-#     $Mkdocs = "$ENV:BHProjectPath\mkdocs.yml"
-#     $Functions = $ModuleInfo.ExportedCommands.Keys | ForEach-Object {"`n    - $($_) : functions/$($_).md"}
-
-#     $Template = @"
-# ---
-
-# site_name: $($ModuleName)
-# repo_url: $($RepositoryUrl)
-# site_author: $($ModuleAuthor)
-# edit_uri: edit/master/docs/
-# theme: readthedocs
-# copyright: "$($ModuleName) is licensed under the <a href='$($RepositoryUrl)/raw/master/LICENSE'>MIT license"
-# pages:
-# - 'Home' : 'index.md'
-# - 'Change log' : 'CHANGELOG.md'
-# - 'Functions': $($Functions -join "`r")
-# "@
-
-#     $Template | Set-Content -Path $Mkdocs -Force
-
-# }
+    # --- Ensure that index.md is present and up to date
+    Write-Output "Updating index.md"
+    Copy-Item -Path "$ENV:BHProjectPath\README.md" -Destination "$($DocsDirectory)\index.md" -Force -Verbose:$VerbosePreference | Out-Null
+}

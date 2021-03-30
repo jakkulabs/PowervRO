@@ -55,4 +55,4 @@ Documentation for each command can be viewed with Get-Help, e.g.:
 Get-Help Get-vROWorkflow
 ```
 
-Alternatively check out our [Read the Docs site](http://powervro.readthedocs.org/en/latest/ "Title")
+or online [here](https://jakkulabs.github.io/PowervRO/).
