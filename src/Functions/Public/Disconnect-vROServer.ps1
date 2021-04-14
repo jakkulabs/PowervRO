@@ -4,7 +4,7 @@
     Disconnect from a vRO server
 
     .DESCRIPTION
-    Disconnect from a vRO server by removing the global vRAConnection variable from PowerShell
+    Disconnect from a vRO server by removing the vROConnection script variable from PowerShell
 
     .EXAMPLE
     Disconnect-vROServer
@@ -41,9 +41,9 @@
         }
         finally {
 
-            # --- Remove the global PowerShell variable
-            Write-Verbose -Message "Removing vROConnection Global Variable"
-            Remove-Variable -Name vROConnection -Scope Global -Force -ErrorAction SilentlyContinue
+            # --- Remove the vROConnection script variable
+            Write-Verbose -Message "Removing vROConnection script variable"
+            Remove-Variable -Name vROConnection -Scope Script -Force -ErrorAction SilentlyContinue
         }
     }
 }
